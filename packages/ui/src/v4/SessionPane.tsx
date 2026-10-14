@@ -63,6 +63,11 @@ import type {
 } from "@zcode/services";
 import { useCodingPlanBillingDiscountFromService } from "@/CodingPlanBillingDiscount.js";
 import { toast } from "@/components/ui/toast.js";
+import {
+  ForkAndDeleteConfirmDialog,
+  persistForkAndDeleteSkip,
+  shouldSkipForkAndDeleteConfirm,
+} from "@/v4/ForkAndDeleteConfirmDialog.js";
 import { cn } from "@/components/lib/utils.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import { DEFAULT_CODE_PREVIEW_SETTINGS } from "@/lib/codePreviewSettings.js";
@@ -630,6 +635,22 @@ export function SessionPane({
     zcodeTaskService,
   } = useServices();
   const { intl, locale } = useZCodeIntl();
+  const removeTaskState = useZCodeSessionStore((state) => state.removeTaskState);
+  // 「从此处继续对话」一次性确认：resolver 挂起 handleFork，弹窗选择后放行。
+  const [forkConfirmResolver, setForkConfirmResolver] = useState<
+    ((confirmed: boolean) => void) | null
+  >(null);
+  const requestForkConfirm = useCallback(
+    () =>
+      new Promise<boolean>((resolve) => {
+        if (shouldSkipForkAndDeleteConfirm()) {
+          resolve(true);
+          return;
+        }
+        setForkConfirmResolver(() => resolve);
+      }),
+    [],
+  );
   const slashCommands = useSlashCommands(workspacePath, workspaceIdentity);
   const baseWorkspaceServices = useBaseWorkspaceServices();
   const workspaceHomePath = useWorkspaceHomePath({
@@ -3758,28 +3779,70 @@ export function SessionPane({
   }, []);
 
   const handleFork = useCallback(
-    (target: ConversationRowTarget) => {
+    (target: ConversationRowTarget, options?: { deleteOriginal?: boolean }) => {
       const current = snapshotRef.current;
       if (!sessionId || current === null) return;
-      // forkAssistant 是 CAS 命令：baseRevision 取当前投影 revision。
-      void dispatchCommand(
-        "forkAssistant",
-        { target },
-        sessionId,
-        current.revision,
-        current.logEpoch,
-      ).then((ack) => {
-        if (ack.status !== "accepted" && ack.status !== "duplicate") {
-          logger.warn(`[v4-pane] fork 被拒绝: ${ack.status} ${ack.reasonCode ?? ""}`);
-          return;
-        }
-        if (ack.result?.type === "forkAssistant") {
-          // 原地切到 child session（与新建会话同一选择路径）。
-          onSessionCreated?.(ack.result.sessionId);
-        }
-      });
+      const runFork = () => {
+        // forkAssistant 是 CAS 命令：baseRevision 取当前投影 revision。
+        void dispatchCommand(
+          "forkAssistant",
+          { target },
+          sessionId,
+          current.revision,
+          current.logEpoch,
+        ).then((ack) => {
+          if (ack.status !== "accepted" && ack.status !== "duplicate") {
+            logger.warn(`[v4-pane] fork 被拒绝: ${ack.status} ${ack.reasonCode ?? ""}`);
+            return;
+          }
+          if (ack.result?.type === "forkAssistant") {
+            // 原地切到 child session（与新建会话同一选择路径）。
+            onSessionCreated?.(ack.result.sessionId);
+            // 分叉并删除原对话（本 fork 新增）：先确保用户已落在新 session，再删旧的；
+            // 删除失败只 toast（新对话已到手，不回滚）。
+            if (options?.deleteOriginal) {
+              void zcodeTaskService
+                .deleteTask({
+                  taskId: sessionId,
+                  workspacePath,
+                  ...(workspaceIdentity ? { workspaceIdentity } : {}),
+                })
+                .then(() => {
+                  removeTaskState(workspacePath, sessionId, workspaceIdentity);
+                })
+                .catch((error: unknown) => {
+                  logger.warn("[v4-pane] fork 后删除原对话失败", {
+                    sessionId,
+                    error: error instanceof Error ? error.message : String(error),
+                  });
+                  toast(intl.formatMessage({ id: "taskList.deleteFailed" }));
+                });
+            }
+          }
+        });
+      };
+      if (options?.deleteOriginal) {
+        // 首次使用走带原理说明的确认弹窗，可勾选「以后不再显示」后直通。
+        void requestForkConfirm().then((confirmed) => {
+          if (confirmed) {
+            runFork();
+          }
+        });
+        return;
+      }
+      runFork();
     },
-    [dispatchCommand, onSessionCreated, sessionId],
+    [
+      dispatchCommand,
+      intl,
+      onSessionCreated,
+      removeTaskState,
+      requestForkConfirm,
+      sessionId,
+      workspaceIdentity,
+      workspacePath,
+      zcodeTaskService,
+    ],
   );
 
   const handleEdit = useCallback(
@@ -5718,6 +5781,17 @@ export function SessionPane({
           )}
         </div>
       </div>
+      <ForkAndDeleteConfirmDialog
+        open={forkConfirmResolver !== null}
+        onResolve={(confirmed, rememberSkip) => {
+          if (rememberSkip) {
+            persistForkAndDeleteSkip(confirmed);
+          }
+          const resolve = forkConfirmResolver;
+          setForkConfirmResolver(null);
+          resolve?.(confirmed);
+        }}
+      />
     </PluginUiSessionProvider>
   );
 }

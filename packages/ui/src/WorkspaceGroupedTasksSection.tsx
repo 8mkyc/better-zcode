@@ -36,6 +36,7 @@ import { buildTaskWorkspaceKey } from "@/lib/taskQueryCache.js";
 import { getPathLeaf } from "@/lib/path.js";
 import { resolveTaskFileTreeTargetFromTabs } from "@/lib/taskFileTreeTarget.js";
 import { toast } from "@/components/ui/toast.js";
+import { useConfirmDialog } from "@/hooks/useConfirmDialog.js";
 import { useBaseWorkspaceServices } from "@/hooks/useWorkspaceServices.js";
 import {
   selectWorkspaceZCodeState,
@@ -616,6 +617,7 @@ export function WorkspaceGroupedTasksSection({
   onOpenAutomations?: () => void;
 }) {
   const { intl } = useZCodeIntl();
+  const confirmDialog = useConfirmDialog();
   const baseServices = useBaseWorkspaceServices();
   const sessionsById = useRemoteWorkspaceSessionStore(
     (state) => state.sessionsById,
@@ -1272,6 +1274,56 @@ export function WorkspaceGroupedTasksSection({
     [intl, removeTaskState, workspaceServiceLookup],
   );
 
+  // 删除对话（本 fork 新增）：确认 → deleteTask → 运行态/远端缓存清理；
+  // 列表刷新由 deleteTask 的 task_deleted 事件驱动。
+  const handleDeleteTask = useCallback(
+    (task: ZCodeTaskMeta) => {
+      const workspaceServices = workspaceServiceLookup.get(
+        buildTaskWorkspaceKey(task.workspacePath, task.workspaceIdentity),
+      );
+      if (!workspaceServices) {
+        return;
+      }
+      void confirmDialog({
+        title: intl.formatMessage({ id: "confirmDialog.taskDeleteTitle" }),
+        description: intl.formatMessage(
+          { id: "confirmDialog.taskDeleteDescription" },
+          {
+            taskTitle:
+              task.title?.trim() || intl.formatMessage({ id: "taskList.untitled" }),
+          },
+        ),
+        confirmLabel: intl.formatMessage({ id: "taskList.delete" }),
+      }).then((confirmed) => {
+        if (!confirmed) {
+          return;
+        }
+        void workspaceServices.services.zcodeTaskService
+          .deleteTask({
+            taskId: task.taskId,
+            workspacePath: task.workspacePath,
+            ...(task.workspaceIdentity ? { workspaceIdentity: task.workspaceIdentity } : {}),
+          })
+          .then(() => {
+            bumpTaskListMembershipVersion();
+            removeTaskState(task.workspacePath, task.taskId, task.workspaceIdentity);
+            if (task.workspaceIdentity) {
+              useRemoteTimelineTaskStore
+                .getState()
+                .removeTask(task.workspacePath, task.taskId, task.workspaceIdentity);
+              useRemotePinnedTaskStore
+                .getState()
+                .removeTask(task.workspacePath, task.taskId, task.workspaceIdentity);
+            }
+          })
+          .catch(() => {
+            toast(intl.formatMessage({ id: "taskList.deleteFailed" }));
+          });
+      });
+    },
+    [confirmDialog, intl, removeTaskState, workspaceServiceLookup],
+  );
+
   const handleRenameGroup = useCallback(
     (groupId: string, title: string) => {
       void renameGroup(groupId, title).catch(() => {
@@ -1747,6 +1799,7 @@ export function WorkspaceGroupedTasksSection({
             onMoveTaskToTop={handleMoveTaskToTop}
             onStartRenameTask={handleStartRenameTask}
             onArchiveTask={handleCloseTask}
+            onDeleteTask={handleDeleteTask}
             onMarkTaskAsUnread={handleMarkTaskAsUnread}
             newGroupSetup={newGroupSetupId === node.group.id}
             onNewGroupSetupStarted={handleNewGroupSetupStarted}
@@ -1775,6 +1828,7 @@ export function WorkspaceGroupedTasksSection({
           onMoveTaskToTop={handleMoveTaskToTop}
           onStartRenameTask={handleStartRenameTask}
           onArchiveTask={handleCloseTask}
+          onDeleteTask={handleDeleteTask}
           onMarkTaskAsUnread={handleMarkTaskAsUnread}
           dragId={taskKey(node.task)}
           dragging={activeDragTaskKey === taskKey(node.task)}
@@ -1867,6 +1921,7 @@ export function WorkspaceGroupedTasksSection({
             onMoveTaskToTop={handleMoveTaskToTop}
             onStartRenameTask={handleStartRenameTask}
             onArchiveTask={handleCloseTask}
+            onDeleteTask={handleDeleteTask}
             onMarkTaskAsUnread={handleMarkTaskAsUnread}
             dragId={activeDragTaskKey ?? undefined}
             dragOverlay

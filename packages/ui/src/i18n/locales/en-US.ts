@@ -661,6 +661,11 @@ const enUS: Record<string, string> = {
   "confirmDialog.taskArchiveTitle": "Archive this task?",
   "confirmDialog.taskArchiveDescription":
     "Task “{taskTitle}” will move to the archive list and can still be restored later.",
+  "confirmDialog.forkAndDeleteTitle": "Continue from here?",
+  "confirmDialog.forkAndDeleteDetail":
+    "How it works:\n· A new conversation starts from this message, keeping the full context before it\n· Everything after this message in the current conversation will be deleted and cannot be restored\n· File changes are NOT reverted — files on disk stay as they are; use the changes panel's \"Undo\" to rewind files",
+  "confirmDialog.forkAndDeleteDontAskAgain": "Don't ask again, just do it",
+  "confirmDialog.forkAndDeleteConfirm": "Continue",
   "confirmDialog.projectRemoveTitle": "Remove this project?",
   "confirmDialog.projectRemoveDescription":
     "Project “{projectName}” will be removed from the sidebar, but files on disk will remain untouched.",
@@ -2203,6 +2208,9 @@ const enUS: Record<string, string> = {
   "taskList.unpin": "Unpin task",
   "taskList.rename": "Rename task",
   "taskList.archive": "Archive task",
+  "taskList.noActiveTaskTarget":
+    "No actionable conversation (an unsent draft does not count).",
+  "taskList.deleteFailed": "Failed to delete the conversation. Please try again later.",
   "taskList.archiveLocal": "Archive local task",
   "taskList.archiveRemote": "Archive remote task",
   "taskList.archiveFailed": "Could not archive task",
@@ -2440,6 +2448,9 @@ const enUS: Record<string, string> = {
   "settings.shortcuts.command.toggleTerminal": "Toggle Terminal",
   "settings.shortcuts.command.previousConversation": "Previous Task",
   "settings.shortcuts.command.nextConversation": "Next Task",
+  "settings.shortcuts.command.renameConversation": "Rename Current Task",
+  "settings.shortcuts.command.archiveConversation": "Archive Current Task",
+  "settings.shortcuts.command.deleteConversation": "Delete Current Task",
   "settings.shortcuts.command.toggleInterfaceMode": "Toggle coding/office mode",
   "settings.shortcuts.command.openOnboarding": "Toggle onboarding",
   "settings.shortcuts.command.navigateBack": "Navigate Back",
@@ -4966,6 +4977,8 @@ const enUS: Record<string, string> = {
   "chat.message.dislike": "Dislike",
   "chat.message.disliked": "Disliked",
   "chat.message.fork": "Fork",
+  "chat.message.forkAndDelete":
+    "Continue from here, deleting later messages (file changes are not reverted)",
   "chat.message.forking": "Forking...",
   "chat.message.fork.unavailable": "Fork after task finishes",
   "chat.message.fork.unsupported": "The current agent does not support forking yet",

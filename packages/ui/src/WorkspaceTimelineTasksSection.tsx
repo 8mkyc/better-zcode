@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import type { ZCodeTaskMeta } from "@zcode/shared";
 import { toast } from "@/components/ui/toast.js";
+import { useConfirmDialog } from "@/hooks/useConfirmDialog.js";
 import {
   ContextMenu,
   ContextMenuTrigger,
@@ -80,6 +81,7 @@ export function WorkspaceTimelineTasksSection({
   ) => void;
 }) {
   const { intl, locale } = useZCodeIntl();
+  const confirmDialog = useConfirmDialog();
   const baseServices = useBaseWorkspaceServices();
   const scopedWorkspaceTabs = useLocalWorkspaceScopes({
     workspaceTabs,
@@ -994,6 +996,67 @@ export function WorkspaceTimelineTasksSection({
                     nextState: { pinned: false, archived: true },
                   });
                 });
+            }}
+            onDeleteTask={() => {
+              // 删除对话（本 fork 新增）：确认 → deleteTask → 运行态/远端缓存清理。
+              // 列表刷新由 deleteTask 的 task_deleted 事件驱动。
+              setPendingArchiveItemKey(null);
+              handleCancelRenameTask();
+              void confirmDialog({
+                title: intl.formatMessage({ id: "confirmDialog.taskDeleteTitle" }),
+                description: intl.formatMessage(
+                  { id: "confirmDialog.taskDeleteDescription" },
+                  {
+                    taskTitle:
+                      contextMenuItem.title?.trim() ||
+                      intl.formatMessage({ id: "taskList.untitled" }),
+                  },
+                ),
+                confirmLabel: intl.formatMessage({ id: "taskList.delete" }),
+              }).then((confirmed) => {
+                if (!confirmed) {
+                  return;
+                }
+                void contextMenuWorkspaceServices.services.zcodeTaskService
+                  .deleteTask({
+                    taskId: contextMenuItem.taskId,
+                    workspacePath: contextMenuItem.workspacePath,
+                    ...(contextMenuItem.workspaceIdentity
+                      ? { workspaceIdentity: contextMenuItem.workspaceIdentity }
+                      : {}),
+                  })
+                  .then(() => {
+                    removeTaskState(
+                      contextMenuItem.workspacePath,
+                      contextMenuItem.taskId,
+                      contextMenuItem.workspaceIdentity,
+                    );
+                    removeOptimisticTaskListItem(
+                      contextMenuItem.workspacePath,
+                      contextMenuItem.taskId,
+                      contextMenuItem.workspaceIdentity,
+                    );
+                    if (contextMenuItem.workspaceIdentity) {
+                      useRemoteTimelineTaskStore
+                        .getState()
+                        .removeTask(
+                          contextMenuItem.workspacePath,
+                          contextMenuItem.taskId,
+                          contextMenuItem.workspaceIdentity,
+                        );
+                      useRemotePinnedTaskStore
+                        .getState()
+                        .removeTask(
+                          contextMenuItem.workspacePath,
+                          contextMenuItem.taskId,
+                          contextMenuItem.workspaceIdentity,
+                        );
+                    }
+                  })
+                  .catch(() => {
+                    toast(intl.formatMessage({ id: "taskList.deleteFailed" }));
+                  });
+              });
             }}
             onMarkTaskAsUnread={() => {
               void contextMenuWorkspaceServices.services.zcodeTaskService

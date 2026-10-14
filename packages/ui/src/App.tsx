@@ -21,6 +21,11 @@ import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import { useIsOfficeMode } from "@/hooks/useInterfaceMode.js";
 import { getPathLeaf } from "@/lib/path.js";
 import {
+  requestActiveTaskArchive,
+  requestActiveTaskDelete,
+  requestActiveTaskRename,
+} from "@/lib/taskRenameRequest.js";
+import {
   addPluginStoreOpenListener,
   type PluginStoreOpenTarget,
 } from "@/lib/pluginStoreNavigation.js";
@@ -1030,6 +1035,11 @@ export function App({
     toggleSidePane: () => runVisibleWorkspaceCommand(handleToggleSidePane),
     previousConversation: handleSelectPreviousConversation,
     nextConversation: handleSelectNextConversation,
+    // 重命名当前任务：经事件桥转发给当前会话 Header 打开既有弹窗；无活动会话时不消费按键。
+    renameConversation: activeTaskId ? () => requestActiveTaskRename() : null,
+    // 归档/删除当前任务：同样经事件桥走 Header 的既有动作链（均带确认弹窗）。
+    archiveConversation: activeTaskId ? () => requestActiveTaskArchive() : null,
+    deleteConversation: activeTaskId ? () => requestActiveTaskDelete() : null,
     navigateBack: canPrimaryNavigationBack
       ? () => runVisibleWorkspaceCommand(handlePrimaryNavigationBack)
       : null,

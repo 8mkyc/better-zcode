@@ -8,7 +8,7 @@ import {
   type RemoteTarget,
   type ZCodeTaskMeta,
 } from "@zcode/shared";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ControlHintTooltip } from "@/ControlHintTooltip.js";
 import { cn } from "@/components/lib/utils.js";
 import { Button } from "@/components/ui/button.js";
@@ -48,6 +48,11 @@ import { useZCodeSessionStore } from "@/store/zcodeSessionStore.js";
 import { useRemotePinnedTaskStore } from "@/store/remotePinnedTaskStore.js";
 import { useRemoteTimelineTaskStore } from "@/store/remoteTimelineTaskStore.js";
 import { TaskRenameDialog } from "@/TaskRenameDialog.js";
+import {
+  addActiveTaskArchiveListener,
+  addActiveTaskDeleteListener,
+  addActiveTaskRenameListener,
+} from "@/lib/taskRenameRequest.js";
 import {
   RemoteSyncDialogs,
   RemoteSyncMenuItems,
@@ -288,6 +293,7 @@ export function WorkspaceHeaderTitleSection({
     setRenameDraft(activeTaskMeta?.title ?? activeTaskTitle ?? "");
   };
 
+
   const handleCancelRenameTask = () => {
     setRenamingTaskId(null);
     setRenameDraft("");
@@ -358,6 +364,7 @@ export function WorkspaceHeaderTitleSection({
 
   const handleArchiveTask = async () => {
     if (!resolvedTaskActionTaskId) {
+      toast(intl.formatMessage({ id: "taskList.noActiveTaskTarget" }));
       return;
     }
 
@@ -420,6 +427,95 @@ export function WorkspaceHeaderTitleSection({
         });
       });
   };
+
+  const handleDeleteTask = () => {
+    if (!resolvedTaskActionTaskId) {
+      // 快捷键触发时目标缺失不该静默——toast 让"没触发"与"触发但没目标"可区分。
+      toast(intl.formatMessage({ id: "taskList.noActiveTaskTarget" }));
+      return;
+    }
+
+    // 删除是不可恢复动作（CLI 会话消息文件保留但列表入口永久消失），必须过确认。
+    void confirmDialog({
+      title: intl.formatMessage({ id: "confirmDialog.taskDeleteTitle" }),
+      description: intl.formatMessage(
+        { id: "confirmDialog.taskDeleteDescription" },
+        {
+          taskTitle:
+            activeTaskMeta?.title?.trim() ||
+            activeTaskTitle?.trim() ||
+            intl.formatMessage({ id: "taskList.untitled" }),
+        },
+      ),
+      confirmLabel: intl.formatMessage({ id: "taskList.delete" }),
+    }).then((confirmed) => {
+      if (!confirmed) {
+        return;
+      }
+      handleCancelRenameTask();
+      void services.zcodeTaskService
+        .deleteTask({
+          taskId: resolvedTaskActionTaskId,
+          workspacePath: workspaceAbsPath,
+          ...(workspaceIdentity ? { workspaceIdentity } : {}),
+        })
+        .then(() => {
+          // deleteTask 自带 task_deleted 事件驱动列表刷新；这里同步清运行态，
+          // 归档链路同款（remote stores + sqlite cache），避免残留可点状态。
+          removeTaskState(
+            workspaceAbsPath,
+            resolvedTaskActionTaskId,
+            workspaceIdentity,
+          );
+          if (workspaceIdentity) {
+            useRemotePinnedTaskStore
+              .getState()
+              .removeTask(workspaceAbsPath, resolvedTaskActionTaskId, workspaceIdentity);
+            useRemoteTimelineTaskStore
+              .getState()
+              .removeTask(workspaceAbsPath, resolvedTaskActionTaskId, workspaceIdentity);
+          }
+        });
+    });
+  };
+
+  // 快捷键（F2/F3/F4）等应用级入口经事件桥请求重命名/归档/删除当前任务；
+  // 只读工作区与菜单入口同样禁用。ref 存最新回调，监听只挂一次。
+  const taskActionRef = useRef({
+    startRename: handleStartRenameTask,
+    archive: handleArchiveTask,
+    del: handleDeleteTask,
+    readOnly: Boolean(readOnlyReason),
+  });
+  taskActionRef.current = {
+    startRename: handleStartRenameTask,
+    archive: handleArchiveTask,
+    del: handleDeleteTask,
+    readOnly: Boolean(readOnlyReason),
+  };
+  useEffect(() => {
+    const disposers = [
+      addActiveTaskRenameListener(() => {
+        if (taskActionRef.current.readOnly) {
+          return;
+        }
+        taskActionRef.current.startRename();
+      }),
+      addActiveTaskArchiveListener(() => {
+        if (taskActionRef.current.readOnly) {
+          return;
+        }
+        void taskActionRef.current.archive();
+      }),
+      addActiveTaskDeleteListener(() => {
+        if (taskActionRef.current.readOnly) {
+          return;
+        }
+        taskActionRef.current.del();
+      }),
+    ];
+    return () => disposers.forEach((dispose) => dispose());
+  }, []);
 
   return (
     <div
@@ -677,6 +773,7 @@ export function WorkspaceHeaderTitleSection({
               onArchiveTask={() => {
                 void handleArchiveTask();
               }}
+              onDeleteTask={handleDeleteTask}
               onMarkTaskAsUnread={() => {
                 if (!resolvedTaskActionTaskId) {
                   return;

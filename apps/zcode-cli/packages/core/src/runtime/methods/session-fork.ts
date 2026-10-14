@@ -172,8 +172,10 @@ function buildForkedSessionInput(
     slug: `${slugify(parentSession.slug)}-${kind}-${now.toString(36)}`.slice(0, 120),
     directory: parentSession.directory,
     path: parentSession.path,
+    // 本 fork 改动：直接继承父对话标题（原为 `Fork of ${parentSession.title}` 前缀）。
+    // 追溯关系仍由 parentID → forkedFromTaskId（UI“从对话中派生”角标）承载。
     title:
-      kind === "selection_side_chat" ? "Selection side chat" : `Fork of ${parentSession.title}`,
+      kind === "selection_side_chat" ? "Selection side chat" : parentSession.title,
     titleSource: "generated",
     version: parentSession.version,
     permission: parentSession.permission,

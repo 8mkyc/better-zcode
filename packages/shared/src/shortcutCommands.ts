@@ -23,6 +23,9 @@ export type ShortcutCommandId =
   | "toggleSidePane"
   | "previousConversation"
   | "nextConversation"
+  | "renameConversation"
+  | "archiveConversation"
+  | "deleteConversation"
   | "navigateBack"
   | "navigateForward"
   | "openModelMenu"
@@ -73,6 +76,11 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommandEntry[] = [
   { id: "toggleSidePane", channel: "window", defaultBindings: ["CmdOrCtrl+Alt+b"] },
   { id: "previousConversation", channel: "window", defaultBindings: ["CmdOrCtrl+Shift+["] },
   { id: "nextConversation", channel: "window", defaultBindings: ["CmdOrCtrl+Shift+]"] },
+  // 重命名当前任务：F2 沿用 Windows 资源管理器惯例；分发到 Header 标题区的既有重命名弹窗。
+  { id: "renameConversation", channel: "window", defaultBindings: ["F2"] },
+  // 归档/删除当前任务：F3/F4 与 F2 连号；同样经事件桥分发到 Header 的既有动作。
+  { id: "archiveConversation", channel: "window", defaultBindings: ["F3"] },
+  { id: "deleteConversation", channel: "window", defaultBindings: ["F4"] },
   { id: "navigateBack", channel: "window", defaultBindings: ["CmdOrCtrl+["] },
   { id: "navigateForward", channel: "window", defaultBindings: ["CmdOrCtrl+]"] },
   // composer 工具条动作（原固定热键转正）：显式 Ctrl 修饰（mac 上也是 Ctrl，

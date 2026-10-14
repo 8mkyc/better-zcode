@@ -29,8 +29,11 @@ export const RESERVED_BINDINGS: ReadonlySet<string> = new Set([
   "CmdOrCtrl+Shift+i",
   "CmdOrCtrl+Shift+j",
   "CmdOrCtrl+Shift+c",
-  // 功能键整段（F1-F12 的任何含修饰组合）
-  ...Array.from({ length: 12 }, (_, index) => `F${index + 1}`),
+  // 功能键：桌面壳只占用裸 F11（全屏 accelerator）/F12（devtools 惯例）；
+  // 裸 F1-F10 未被应用菜单或系统注册，放开给命令表与用户改绑（本 fork 改动，
+  // 上游原为 F1-F12 整段保留）。带修饰键的 F 组合维持整段保留。
+  "F11",
+  "F12",
   ...Array.from({ length: 12 }, (_, index) => `CmdOrCtrl+F${index + 1}`),
   ...Array.from({ length: 12 }, (_, index) => `CmdOrCtrl+Shift+F${index + 1}`),
   // 方向键单键（组件固定交互）

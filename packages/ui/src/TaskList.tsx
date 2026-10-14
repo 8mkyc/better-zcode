@@ -45,6 +45,7 @@ export const TaskList = memo(function TaskList({
   onRenameTask,
   onSetTaskPinned,
   onArchiveTask,
+  onDeleteTask,
   onSetTaskUnread,
   mobileActiveTaskKey,
   readOnlyReason,
@@ -67,6 +68,8 @@ export const TaskList = memo(function TaskList({
   onRenameTask: (taskId: string, title: string) => Promise<ZCodeTaskMeta | null>;
   onSetTaskPinned: (taskId: string, pinned: boolean) => Promise<ZCodeTaskMeta | null>;
   onArchiveTask: (taskId: string) => Promise<ZCodeTaskMeta | null>;
+  /** 「删除对话」（本 fork 新增；父层负责确认弹窗与服务调用）。 */
+  onDeleteTask?: (taskId: string) => void;
   onSetTaskUnread: (taskId: string, unread: boolean) => Promise<ZCodeTaskMeta | null>;
   mobileActiveTaskKey?: string | null;
   readOnlyReason?: string;
@@ -89,12 +92,14 @@ export const TaskList = memo(function TaskList({
   const onSelectTaskRef = useRef(onSelectTask);
   const onSetTaskPinnedRef = useRef(onSetTaskPinned);
   const onArchiveTaskRef = useRef(onArchiveTask);
+  const onDeleteTaskRef = useRef(onDeleteTask);
   const onSetTaskUnreadRef = useRef(onSetTaskUnread);
   pendingArchiveTaskIdRef.current = pendingArchiveTaskId;
   renamingTaskIdRef.current = renamingTaskId;
   onSelectTaskRef.current = onSelectTask;
   onSetTaskPinnedRef.current = onSetTaskPinned;
   onArchiveTaskRef.current = onArchiveTask;
+  onDeleteTaskRef.current = onDeleteTask;
   onSetTaskUnreadRef.current = onSetTaskUnread;
   const handleCancelArchiveConfirm = useCallback(() => {
     setPendingArchiveTaskId(null);
@@ -192,6 +197,16 @@ export const TaskList = memo(function TaskList({
       await onArchiveTaskRef.current(taskId);
     },
     [handleCancelRenameTask, readOnlyReason],
+  );
+
+  const handleDeleteTask = useCallback(
+    (taskId: string) => {
+      if (readOnlyReason) {
+        return;
+      }
+      onDeleteTaskRef.current?.(taskId);
+    },
+    [readOnlyReason],
   );
 
   const handleSubmitRenameTask = useCallback(
@@ -464,6 +479,7 @@ export const TaskList = memo(function TaskList({
                   onTogglePinTask={handleTogglePinTask}
                   onStartRenameTask={handleStartRenameTask}
                   onArchiveTask={handleArchiveTask}
+                  onDeleteTask={onDeleteTask ? handleDeleteTask : undefined}
                   onMarkTaskAsUnread={handleMarkTaskAsUnread}
                   disableTaskActions={Boolean(readOnlyReason)}
                   disabledReason={readOnlyReason}

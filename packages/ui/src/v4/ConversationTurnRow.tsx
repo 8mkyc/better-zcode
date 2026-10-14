@@ -19,7 +19,7 @@ import { toolCallRowToLegacyNode } from "@/v4/toolCallRowAdapter.js";
 interface ConversationTurnRowProps {
   row: ConversationRow;
   context: ConversationRowRenderContext;
-  onFork?: (target: ConversationRowTarget) => void;
+  onFork?: (target: ConversationRowTarget, options?: { deleteOriginal?: boolean }) => void;
   onRetry?: (target: ConversationRowTarget) => void;
   onFeedbackChange?: AssistantFeedbackHandler;
   onEdit?: (

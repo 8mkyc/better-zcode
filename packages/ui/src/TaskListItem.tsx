@@ -844,6 +844,7 @@ export function TaskListItemContextMenuContent({
   onTogglePinTask,
   onStartRenameTask,
   onArchiveTask,
+  onDeleteTask,
   onMarkTaskAsUnread,
   disableTaskActions = false,
   disabledReason,
@@ -856,6 +857,8 @@ export function TaskListItemContextMenuContent({
   onTogglePinTask: (taskId: string, pinned: boolean) => void;
   onStartRenameTask: (taskId: string, currentTitle: string) => void;
   onArchiveTask: (taskId: string) => void;
+  /** 「删除对话」（本 fork 新增；未传入不显示菜单项）。 */
+  onDeleteTask?: (taskId: string) => void;
   onMarkTaskAsUnread: (taskId: string) => void;
   disableTaskActions?: boolean;
   disabledReason?: string;
@@ -969,6 +972,13 @@ export function TaskListItemContextMenuContent({
       onArchiveTask={() => {
         onArchiveTask(task.taskId);
       }}
+      onDeleteTask={
+        onDeleteTask
+          ? () => {
+              onDeleteTask(task.taskId);
+            }
+          : undefined
+      }
       onMarkTaskAsUnread={() => {
         onMarkTaskAsUnread(task.taskId);
       }}

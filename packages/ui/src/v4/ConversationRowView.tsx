@@ -26,6 +26,7 @@ import {
   PencilIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
+  Trash2Icon,
   TrendingUpDownIcon,
   XIcon,
 } from "lucide-react";
@@ -252,12 +253,17 @@ export interface EditWorkspaceRewindAvailability {
   reason: "available" | "noFiles" | "reverted" | "running" | "unavailable";
 }
 
+/** fork 动作扩展选项（本 fork 新增）：deleteOriginal=true 表示分叉后删除原对话。 */
+export interface ConversationForkOptions {
+  deleteOriginal?: boolean;
+}
+
 export interface ConversationRowViewProps {
   row: ConversationRow;
   /** 渲染上下文（theme/codePreviewSettings/workspacePath）；宿主保证引用稳定。 */
   context: ConversationRowRenderContext;
   /** 完成态 assistant 行的 fork 入口（forkAssistant command）。 */
-  onFork?: (target: ConversationRowTarget) => void;
+  onFork?: (target: ConversationRowTarget, options?: ConversationForkOptions) => void;
   /** assistant entity 反馈 CAS；UI 先乐观更新，命令失败时回滚。 */
   onFeedbackChange?: AssistantFeedbackHandler;
   /** 协议兼容：上层仍可提供 retryTurn capability，但产品 UI 不渲染普通重试入口。 */
@@ -1500,7 +1506,7 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
   sessionId?: string | null;
   turnId?: string;
   sourceCommandIds?: readonly string[];
-  onFork?: (target: ConversationRowTarget) => void;
+  onFork?: (target: ConversationRowTarget, options?: ConversationForkOptions) => void;
   onRetry?: (target: ConversationRowTarget) => void;
   onFeedbackChange?: AssistantFeedbackHandler;
   className?: string;
@@ -1516,6 +1522,7 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
     id: localFeedback === "dislike" ? "chat.message.disliked" : "chat.message.dislike",
   });
   const forkLabel = intl.formatMessage({ id: "chat.message.fork" });
+  const forkAndDeleteLabel = intl.formatMessage({ id: "chat.message.forkAndDelete" });
   const timeLabel = formatMessageTimeLabel(createdAt, locale, intl);
   const resolveTooltip = (label: string): string | undefined =>
     compactForRemoteControl ? undefined : label;
@@ -1574,6 +1581,12 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
         completed: { resultSource: "optimistic_projection" },
         failureStage: "fork",
       });
+    }
+  }, [entityId, onFork, rowId]);
+  // 分叉并删除原对话（本 fork 新增）：走同一条 onFork 回调，由 SessionPane 分支处理。
+  const handleForkAndDelete = useCallback(() => {
+    if (entityId) {
+      onFork?.({ rowId, entityId }, { deleteOriginal: true });
     }
   }, [entityId, onFork, rowId]);
   return (
@@ -1635,6 +1648,16 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
           <TrendingUpDownIcon className="size-3.5" />
         </MessageAction>
       ) : null}
+      {onFork && entityId ? (
+        <MessageAction
+          aria-label={forkAndDeleteLabel}
+          label={forkAndDeleteLabel}
+          tooltip={resolveTooltip(forkAndDeleteLabel)}
+          onClick={handleForkAndDelete}
+        >
+          <Trash2Icon className="size-3.5" />
+        </MessageAction>
+      ) : null}
       {turnId && hookInvocations ? (
         <ConversationHookDetailsAction rows={hookInvocations} turnId={turnId} />
       ) : null}
@@ -1666,7 +1689,7 @@ const AssistantTextRowView = memo(function AssistantTextRowView({
 }: {
   row: AssistantTextRow;
   context: ConversationRowRenderContext;
-  onFork?: (target: ConversationRowTarget) => void;
+  onFork?: (target: ConversationRowTarget, options?: ConversationForkOptions) => void;
   onRetry?: (target: ConversationRowTarget) => void;
   onFeedbackChange?: AssistantFeedbackHandler;
   hideActions?: boolean;

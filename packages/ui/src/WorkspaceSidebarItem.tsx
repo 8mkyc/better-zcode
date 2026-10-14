@@ -670,6 +670,62 @@ export const WorkspaceSidebarItem = memo(function WorkspaceSidebarItem({
     ],
   );
 
+  // 删除对话（本 fork 新增）：确认弹窗 → deleteTask → 运行态/远端 store 清理。
+  // deleteTask 自带 task_deleted 事件驱动列表刷新，这里只做同款即时清理防残留可点状态。
+  const handleDeleteTask = useCallback(
+    (taskId: string) => {
+      if (readOnlyReason) {
+        return;
+      }
+      const currentTask = findCurrentTaskItem(taskId);
+      const taskTitle =
+        currentTask?.title?.trim() ||
+        intl.formatMessage({ id: "taskList.untitled" });
+      void confirmDialog({
+        title: intl.formatMessage({ id: "confirmDialog.taskDeleteTitle" }),
+        description: intl.formatMessage(
+          { id: "confirmDialog.taskDeleteDescription" },
+          { taskTitle },
+        ),
+        confirmLabel: intl.formatMessage({ id: "taskList.delete" }),
+      }).then((confirmed) => {
+        if (!confirmed) {
+          return;
+        }
+        void zcodeTaskService
+          .deleteTask({
+            taskId,
+            workspacePath: tab.workspacePath,
+            ...(tab.workspaceIdentity ? { workspaceIdentity: tab.workspaceIdentity } : {}),
+          })
+          .then(() => {
+            removeTaskState(tab.workspacePath, taskId, tab.workspaceIdentity);
+            if (tab.workspaceIdentity) {
+              useRemoteTimelineTaskStore
+                .getState()
+                .removeTask(tab.workspacePath, taskId, tab.workspaceIdentity);
+              useRemotePinnedTaskStore
+                .getState()
+                .removeTask(tab.workspacePath, taskId, tab.workspaceIdentity);
+            }
+          })
+          .catch(() => {
+            toast(intl.formatMessage({ id: "taskList.deleteFailed" }));
+          });
+      });
+    },
+    [
+      confirmDialog,
+      findCurrentTaskItem,
+      intl,
+      readOnlyReason,
+      removeTaskState,
+      tab.workspaceIdentity,
+      tab.workspacePath,
+      zcodeTaskService,
+    ],
+  );
+
   const handleSetTaskUnread = useCallback(
     async (taskId: string, unread: boolean) => {
       if (readOnlyReason) {
@@ -1139,6 +1195,7 @@ export const WorkspaceSidebarItem = memo(function WorkspaceSidebarItem({
             onRenameTask={handleRenameTask}
             onSetTaskPinned={handleSetTaskPinned}
             onArchiveTask={handleArchiveTask}
+            onDeleteTask={handleDeleteTask}
             onSetTaskUnread={handleSetTaskUnread}
             readOnlyReason={readOnlyReason}
           />

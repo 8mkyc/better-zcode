@@ -330,7 +330,7 @@ describe("快捷键生效表 resolve", () => {
 });
 
 describe("快捷键冲突检测（拒绝 + 标红）", () => {
-  it("保留键（编辑类 / 刷新 / F 键 / 方向键）拒绝为 reserved", () => {
+  it("保留键（编辑类 / 刷新 / F11·F12 / 方向键）拒绝为 reserved", () => {
     expect(checkShortcutBindingConflict("toggleSidebar", "CmdOrCtrl+c")).toEqual({
       kind: "reserved",
       binding: "CmdOrCtrl+c",
@@ -338,10 +338,23 @@ describe("快捷键冲突检测（拒绝 + 标红）", () => {
     expect(checkShortcutBindingConflict("toggleSidebar", "CmdOrCtrl+r")).toMatchObject({
       kind: "reserved",
     });
-    expect(checkShortcutBindingConflict("toggleSidebar", "F5")).toMatchObject({ kind: "reserved" });
+    expect(checkShortcutBindingConflict("toggleSidebar", "F11")).toMatchObject({
+      kind: "reserved",
+    });
     expect(checkShortcutBindingConflict("toggleSidebar", "ArrowUp")).toMatchObject({
       kind: "reserved",
     });
+  });
+
+  it("裸 F1-F10 已放开（本 fork：桌面壳未占用，供命令默认绑定与用户改绑）", () => {
+    expect(RESERVED_BINDINGS.has("F2")).toBe(false);
+    expect(RESERVED_BINDINGS.has("F3")).toBe(false);
+    expect(RESERVED_BINDINGS.has("F5")).toBe(false);
+    expect(RESERVED_BINDINGS.has("F10")).toBe(false);
+    expect(RESERVED_BINDINGS.has("F11")).toBe(true);
+    expect(RESERVED_BINDINGS.has("F12")).toBe(true);
+    // 带修饰键的 F 组合维持整段保留
+    expect(RESERVED_BINDINGS.has("CmdOrCtrl+F5")).toBe(true);
   });
 
   it("工具条三键已转正为可配置命令（spec §12.6），不再占用保留黑名单", () => {
