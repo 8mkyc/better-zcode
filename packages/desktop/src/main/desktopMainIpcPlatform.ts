@@ -39,6 +39,7 @@ import {
 } from "./resourceManagerWindow.js";
 import { registerResourceManagerStorageIpc } from "./resourceManagerStorage.js";
 import { registerResourceManagerNetworkIpc } from "./resourceManagerNetwork.js";
+import { registerThirdPartyBalanceIpc } from "./thirdPartyBalanceIpc.js";
 import { applyWindowsTitleBarTheme, getWindowOverlayTheme } from "./desktopWindowChrome.js";
 import { syncWindowControlsOverlayForZoomLevel } from "./desktopWindowButtonPosition.js";
 import { resolveDesktopZoomLevelFromFactor } from "./desktopZoom.js";
@@ -210,6 +211,7 @@ export function registerPlatformIpcHandlers(options: {
   });
   registerResourceManagerStorageIpc();
   registerResourceManagerNetworkIpc();
+  registerThirdPartyBalanceIpc();
   ipcMain.handle(PlatformChannels.GetZCodeStdioTapDevState, () => readZCodeStdioTapDevState());
   ipcMain.on(PlatformChannels.OpenResourceManager, () => {
     openResourceManager();

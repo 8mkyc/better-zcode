@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld("__ZCODE_DEVICE_ID__", parseDeviceIdFromArgs());
 import type {
   AppSettings,
   ApplicationIconRequest,
+  ThirdPartyBalanceFetchRequest,
   BrowserViewOperationPayload,
   BrowserGuestAttachResult,
   BrowserViewScreenshotSurfacePreparePayload,
@@ -893,6 +894,9 @@ contextBridge.exposeInMainWorld("zcode", {
   getInstalledEditors: () => ipcRenderer.invoke(PlatformChannels.GetInstalledEditors),
   getApplicationIcon: (request: string | ApplicationIconRequest) =>
     ipcRenderer.invoke(PlatformChannels.GetApplicationIcon, request),
+  /** 第三方模型厂商余额查询（main 代理 fetch；本 fork 新增） */
+  fetchThirdPartyBalance: (request: ThirdPartyBalanceFetchRequest) =>
+    ipcRenderer.invoke(PlatformChannels.ThirdPartyBalanceFetch, request),
   /** 用指定编辑器打开路径 */
   openInEditor: (editorId: string, path: string, options?: OpenInEditorOptions) =>
     ipcRenderer.invoke(PlatformChannels.OpenInEditor, {

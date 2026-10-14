@@ -184,6 +184,9 @@ export function createDesktopPlatform(options: {
     getInstalledEditors: () => window.zcode.getInstalledEditors(),
     getApplicationIcon: (bundleId) =>
       window.zcode.getApplicationIcon?.(bundleId) ?? Promise.resolve(null),
+    fetchThirdPartyBalance: (request) =>
+      window.zcode.fetchThirdPartyBalance?.(request) ??
+      Promise.resolve({ ok: false as const, error: "bridge unavailable" }),
     openInEditor: (editorId, path, editorOptions) =>
       window.zcode.openInEditor(editorId, path, editorOptions),
     executeDesktopCommand: (command) => window.zcode.executeDesktopCommand(command),

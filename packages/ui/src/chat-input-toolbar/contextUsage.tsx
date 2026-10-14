@@ -25,6 +25,7 @@ import { Progress } from "@/components/ui/progress.js";
 import { useOptionalTabStore } from "@/store/TabStoreProvider.js";
 import { isSettingsTab } from "@/store/tabStore.js";
 import { ControlHintTooltip } from "@/ControlHintTooltip.js";
+import { ChatThirdPartyBalancePanel } from "@/chat-input-toolbar/ThirdPartyBalancePanel.js";
 import { resolveCodingPlanUsageRemainingState } from "@/CodingPlanUsageRemainingPanel.js";
 import { CodingPlanQuotaResetStatusContent } from "@/components/coding-plan-quota-reset/CodingPlanQuotaResetStatus.js";
 import { useCodingPlanQuotaResetUi } from "@/hooks/useCodingPlanQuotaResetUi.js";
@@ -1096,6 +1097,7 @@ export function ChatContextUsage({
               )}
             />
           ) : null}
+          <ChatThirdPartyBalancePanel separated={Boolean(hasStartPlanBalance || hasCodingPlanUsageRemaining)} />
         </ContextContentBody>
       </ContextContent>
     </Context>

@@ -380,6 +380,10 @@ declare global {
       getApplicationIcon?(
         request: string | ApplicationIconRequest,
       ): Promise<ApplicationIconInfo | null>;
+      /** 第三方模型厂商余额查询（main 代理 fetch；本 fork 新增） */
+      fetchThirdPartyBalance?(
+        request: import("@zcode/shared").ThirdPartyBalanceFetchRequest,
+      ): Promise<import("@zcode/shared").ThirdPartyBalanceFetchResponse>;
       /** 用指定编辑器打开路径 */
       openInEditor(
         editorId: string,

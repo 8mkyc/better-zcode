@@ -235,6 +235,16 @@ export interface ApplicationIconRequest {
   locators: ApplicationIconLocator[];
 }
 
+/** 第三方模型厂商余额查询请求（本 fork 新增；main 进程按域名白名单代理 fetch）。 */
+export interface ThirdPartyBalanceFetchRequest {
+  url: string;
+  apiKey: string;
+}
+
+export type ThirdPartyBalanceFetchResponse =
+  | { ok: true; status: number; bodyText: string }
+  | { ok: false; error: string };
+
 export type OpenInEditorRemoteTarget =
   | Pick<SSHConnectOptions, "kind" | "host" | "port" | "username" | "sshConfigAlias">
   | Pick<WSLConnectOptions, "kind" | "distro" | "user">
@@ -793,6 +803,11 @@ export interface IPlatformService {
   getApplicationIcon?(
     request: string | ApplicationIconRequest,
   ): Promise<ApplicationIconInfo | null>;
+
+  /** 第三方模型厂商余额查询（main 进程代理 fetch 绕 CORS）；非 Desktop 平台可不实现。（本 fork 新增） */
+  fetchThirdPartyBalance?(
+    request: ThirdPartyBalanceFetchRequest,
+  ): Promise<ThirdPartyBalanceFetchResponse>;
 
   /** 打开反馈入口，由平台自行解析最终地址 */
   openFeedback(): Promise<void>;

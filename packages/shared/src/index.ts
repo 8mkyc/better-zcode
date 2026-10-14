@@ -235,6 +235,8 @@ export type {
   RemoteServiceSession,
   SSHConfigAliasOption,
   TaskNotificationPayload,
+  ThirdPartyBalanceFetchRequest,
+  ThirdPartyBalanceFetchResponse,
   UpdateCheckResultPayload,
   UpdateStatePayload,
   WSLDistro,
