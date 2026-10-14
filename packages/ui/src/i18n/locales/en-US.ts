@@ -5090,6 +5090,11 @@ const enUS: Record<string, string> = {
   "chat.thirdPartyBalance.usage": "Used {used}% · Left {left}%",
   "chat.thirdPartyBalance.planGrant": "Plan {used}/{limit}",
   "chat.thirdPartyBalance.setCookie": "Set Cookie",
+  "chat.thirdPartyBalance.login": "Sign in to MiMo",
+  "chat.thirdPartyBalance.manualPaste": "Paste manually",
+  "chat.thirdPartyBalance.loginSuccess": "Cookie captured automatically",
+  "chat.thirdPartyBalance.loginCancelled": "Sign-in cancelled; no cookie captured",
+  "chat.thirdPartyBalance.loginFailed": "Sign-in failed: {error}",
   "chat.thirdPartyBalance.cookieExpired": "Session expired",
   "chat.thirdPartyBalance.cookieDialog.title": "Connect MiMo Tokens Plan",
   "chat.thirdPartyBalance.cookieDialog.description":

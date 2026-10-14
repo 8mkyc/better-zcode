@@ -482,6 +482,8 @@ export const PlatformChannels = {
   GetApplicationIcon: "zcode:get-application-icon",
   /** Renderer → Main：第三方模型厂商余额查询（本 fork 新增；main 代理 fetch 绕 CORS，域名白名单） */
   ThirdPartyBalanceFetch: "zcode:third-party-balance-fetch",
+  /** Renderer → Main：MiMo 登录窗（登录成功自动抓 Cookie；本 fork 新增） */
+  MimoLoginWindow: "zcode:mimo-login-window",
   /** Renderer → Main：用指定编辑器打开路径 */
   OpenInEditor: "zcode:open-in-editor",
   /** Renderer → Main：执行桌面窗口级命令 */
@@ -1293,6 +1295,10 @@ export interface PlatformChannelMap {
   [PlatformChannels.ThirdPartyBalanceFetch]: {
     request: import("./platform.js").ThirdPartyBalanceFetchRequest;
     response: import("./platform.js").ThirdPartyBalanceFetchResponse;
+  };
+  [PlatformChannels.MimoLoginWindow]: {
+    request: void;
+    response: import("./platform.js").MimoLoginResult;
   };
   [PlatformChannels.OpenInEditor]: {
     request: { editorId: string; path: string; options?: OpenInEditorOptions };

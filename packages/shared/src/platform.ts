@@ -248,6 +248,9 @@ export type ThirdPartyBalanceFetchResponse =
   | { ok: true; status: number; bodyText: string }
   | { ok: false; error: string };
 
+/** MiMo 登录窗结果（本 fork 新增）：登录成功回自动抓取的 Cookie 请求头串。 */
+export type MimoLoginResult = { ok: true; cookie: string } | { ok: false; error: string };
+
 export type OpenInEditorRemoteTarget =
   | Pick<SSHConnectOptions, "kind" | "host" | "port" | "username" | "sshConfigAlias">
   | Pick<WSLConnectOptions, "kind" | "distro" | "user">
@@ -811,6 +814,9 @@ export interface IPlatformService {
   fetchThirdPartyBalance?(
     request: ThirdPartyBalanceFetchRequest,
   ): Promise<ThirdPartyBalanceFetchResponse>;
+
+  /** MiMo 登录窗：打开平台登录页，登录成功自动抓 Cookie 返回；非 Desktop 平台可不实现。（本 fork 新增） */
+  openMimoLoginAndGetCookie?(): Promise<MimoLoginResult>;
 
   /** 打开反馈入口，由平台自行解析最终地址 */
   openFeedback(): Promise<void>;

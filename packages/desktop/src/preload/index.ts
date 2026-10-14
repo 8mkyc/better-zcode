@@ -897,6 +897,8 @@ contextBridge.exposeInMainWorld("zcode", {
   /** 第三方模型厂商余额查询（main 代理 fetch；本 fork 新增） */
   fetchThirdPartyBalance: (request: ThirdPartyBalanceFetchRequest) =>
     ipcRenderer.invoke(PlatformChannels.ThirdPartyBalanceFetch, request),
+  /** MiMo 登录窗（登录成功自动抓 Cookie；本 fork 新增） */
+  mimoLoginFetchCookies: () => ipcRenderer.invoke(PlatformChannels.MimoLoginWindow),
   /** 用指定编辑器打开路径 */
   openInEditor: (editorId: string, path: string, options?: OpenInEditorOptions) =>
     ipcRenderer.invoke(PlatformChannels.OpenInEditor, {

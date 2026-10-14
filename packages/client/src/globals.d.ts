@@ -384,6 +384,8 @@ declare global {
       fetchThirdPartyBalance?(
         request: import("@zcode/shared").ThirdPartyBalanceFetchRequest,
       ): Promise<import("@zcode/shared").ThirdPartyBalanceFetchResponse>;
+      /** MiMo 登录窗（登录成功自动抓 Cookie；本 fork 新增） */
+      mimoLoginFetchCookies?(): Promise<import("@zcode/shared").MimoLoginResult>;
       /** 用指定编辑器打开路径 */
       openInEditor(
         editorId: string,

@@ -237,6 +237,7 @@ export type {
   TaskNotificationPayload,
   ThirdPartyBalanceFetchRequest,
   ThirdPartyBalanceFetchResponse,
+  MimoLoginResult,
   UpdateCheckResultPayload,
   UpdateStatePayload,
   WSLDistro,

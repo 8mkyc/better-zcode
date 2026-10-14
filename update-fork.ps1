@@ -70,6 +70,29 @@ Copy-Item -Recurse -Force (Join-Path $Repo 'packages\desktop\out') $dest
 
 # --- 5. 按上游官方规则重包 + 备份 + 原子替换 ---
 Write-Host '[5/5] 重包并替换 app.asar（上游 unpack 规则）…' -ForegroundColor Cyan
+# 替换前二次锁探测：构建/解包/覆盖的几分钟里 ZCode 可能被重新打开（EBUSY 撞车实测）。
+# 桌面一键流程（ZCODE_FORK_AUTO_CLOSE=1）授权自动再关；否则明确报错让人关掉再重试。
+for ($i = 0; $i -lt 3; $i++) {
+    $locked = $true
+    try {
+        $fs = [System.IO.File]::Open($AsarPath, 'Open', 'ReadWrite', 'None')
+        $fs.Close()
+        $locked = $false
+        break
+    } catch { }
+    if ($env:ZCODE_FORK_AUTO_CLOSE -eq '1') {
+        Write-Host '检测到 ZCode 被重新打开并锁住 app.asar，自动关闭以完成更新…' -ForegroundColor Yellow
+        Stop-Process -Name ZCode -Force -ErrorAction SilentlyContinue
+        Start-Sleep -Seconds 5
+    } else {
+        Write-Host 'app.asar 被占用（ZCode 已被重新打开？）。关闭 ZCode 后重新运行本脚本。' -ForegroundColor Red
+        exit 1
+    }
+}
+if ($locked) {
+    Write-Host 'app.asar 锁未释放，取消替换（原包未动）。' -ForegroundColor Red
+    exit 1
+}
 Copy-Item -Force $AsarPath "$AsarPath.bak"
 $env:ZCODE_FORK_STAGING = $Staging
 $env:ZCODE_FORK_ASAR = $AsarPath

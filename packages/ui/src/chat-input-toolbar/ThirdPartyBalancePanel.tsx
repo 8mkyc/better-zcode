@@ -9,6 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.js";
+import { toast } from "@/components/ui/toast.js";
+import { useOptionalPlatform } from "@/hooks/usePlatform.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import {
   compactTokens,
@@ -65,11 +67,15 @@ function BalanceRow({
   todayLabel,
   onRefresh,
   onSetCookie,
+  onLogin,
+  loginBusy,
 }: {
   entry: ThirdPartyBalanceEntry;
   todayLabel: string;
   onRefresh: () => void;
   onSetCookie: () => void;
+  onLogin: () => void;
+  loginBusy: boolean;
 }) {
   const { intl } = useZCodeIntl();
   const todayText = formatTodaySpent(entry);
@@ -110,15 +116,26 @@ function BalanceRow({
             </a>
           ) : null}
           {entry.needsCookie ? (
-            <button
-              type="button"
-              aria-label={intl.formatMessage({ id: "chat.thirdPartyBalance.setCookie" })}
-              className="flex items-center gap-0.5 text-ui-sm text-foreground-subtle transition-colors hover:text-foreground"
-              onClick={onSetCookie}
-            >
-              <KeyRoundIcon className="size-3" />
-              {intl.formatMessage({ id: "chat.thirdPartyBalance.setCookie" })}
-            </button>
+            <>
+              <button
+                type="button"
+                disabled={loginBusy}
+                aria-label={intl.formatMessage({ id: "chat.thirdPartyBalance.login" })}
+                className="flex items-center gap-0.5 text-ui-sm text-foreground-subtle transition-colors hover:text-foreground disabled:opacity-50"
+                onClick={onLogin}
+              >
+                <KeyRoundIcon className={cn("size-3", loginBusy && "animate-pulse")} />
+                {intl.formatMessage({ id: "chat.thirdPartyBalance.login" })}
+              </button>
+              <button
+                type="button"
+                aria-label={intl.formatMessage({ id: "chat.thirdPartyBalance.manualPaste" })}
+                className="text-ui-sm text-foreground-subtle underline decoration-dotted transition-colors hover:text-foreground"
+                onClick={onSetCookie}
+              >
+                {intl.formatMessage({ id: "chat.thirdPartyBalance.manualPaste" })}
+              </button>
+            </>
           ) : null}
           {entry.state !== "unsupported" && entry.state !== "error" ? (
             <button
@@ -156,10 +173,40 @@ function BalanceRow({
  */
 export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: boolean }) {
   const { intl } = useZCodeIntl();
+  const platform = useOptionalPlatform();
   const { entries, refresh, supported } = useThirdPartyBalances();
   const [refreshTick, setRefreshTick] = useState(0);
   const [cookieDialogOpen, setCookieDialogOpen] = useState(false);
   const [cookieDraft, setCookieDraft] = useState(readMimoCookie());
+  const [loginBusy, setLoginBusy] = useState(false);
+  // 一键登录：打开 MiMo 登录窗 → main 自动抓 Cookie → 存好即刷新（零复制粘贴）。
+  const startMimoLogin = () => {
+    if (!platform?.openMimoLoginAndGetCookie || loginBusy) {
+      return;
+    }
+    setLoginBusy(true);
+    void platform
+      .openMimoLoginAndGetCookie()
+      .then((result) => {
+        if (result.ok) {
+          writeMimoCookie(result.cookie);
+          setCookieDraft(result.cookie);
+          setCookieDialogOpen(false);
+          refresh();
+          toast(intl.formatMessage({ id: "chat.thirdPartyBalance.loginSuccess" }));
+          return;
+        }
+        toast(
+          result.error === "cancelled"
+            ? intl.formatMessage({ id: "chat.thirdPartyBalance.loginCancelled" })
+            : intl.formatMessage(
+                { id: "chat.thirdPartyBalance.loginFailed" },
+                { error: result.error },
+              ),
+        );
+      })
+      .finally(() => setLoginBusy(false));
+  };
   const todayLabel = intl.formatMessage({ id: "chat.thirdPartyBalance.today" });
   if (!supported) {
     return null;
@@ -193,6 +240,8 @@ export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: 
           entry={entry}
           todayLabel={todayLabel}
           onRefresh={refresh}
+          onLogin={startMimoLogin}
+          loginBusy={loginBusy}
           onSetCookie={() => {
             setCookieDraft(readMimoCookie());
             setCookieDialogOpen(true);
@@ -217,6 +266,16 @@ export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: 
             <div className="text-ui-sm whitespace-pre-line text-foreground-subtle">
               {intl.formatMessage({ id: "chat.thirdPartyBalance.cookieDialog.description" })}
             </div>
+            <Button
+              type="button"
+              size="lg"
+              disabled={loginBusy}
+              className="h-10 w-full"
+              onClick={startMimoLogin}
+            >
+              <KeyRoundIcon className={cn("size-4", loginBusy && "animate-pulse")} />
+              {intl.formatMessage({ id: "chat.thirdPartyBalance.login" })}
+            </Button>
             <textarea
               value={cookieDraft}
               rows={4}

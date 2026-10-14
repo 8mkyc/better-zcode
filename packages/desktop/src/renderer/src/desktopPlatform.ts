@@ -187,6 +187,9 @@ export function createDesktopPlatform(options: {
     fetchThirdPartyBalance: (request) =>
       window.zcode.fetchThirdPartyBalance?.(request) ??
       Promise.resolve({ ok: false as const, error: "bridge unavailable" }),
+    openMimoLoginAndGetCookie: () =>
+      window.zcode.mimoLoginFetchCookies?.() ??
+      Promise.resolve({ ok: false as const, error: "bridge unavailable" }),
     openInEditor: (editorId, path, editorOptions) =>
       window.zcode.openInEditor(editorId, path, editorOptions),
     executeDesktopCommand: (command) => window.zcode.executeDesktopCommand(command),

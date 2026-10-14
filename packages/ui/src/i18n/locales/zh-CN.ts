@@ -4769,6 +4769,11 @@ const zhCN: Record<string, string> = {
   "chat.thirdPartyBalance.usage": "已用 {used}% · 剩 {left}%",
   "chat.thirdPartyBalance.planGrant": "计划 {used}/{limit}",
   "chat.thirdPartyBalance.setCookie": "设置 Cookie",
+  "chat.thirdPartyBalance.login": "登录 MiMo",
+  "chat.thirdPartyBalance.manualPaste": "手动粘贴",
+  "chat.thirdPartyBalance.loginSuccess": "Cookie 已自动读取",
+  "chat.thirdPartyBalance.loginCancelled": "登录已取消，未读到 Cookie",
+  "chat.thirdPartyBalance.loginFailed": "登录读取失败：{error}",
   "chat.thirdPartyBalance.cookieExpired": "会话过期",
   "chat.thirdPartyBalance.cookieDialog.title": "连接 MiMo Tokens Plan",
   "chat.thirdPartyBalance.cookieDialog.description":
