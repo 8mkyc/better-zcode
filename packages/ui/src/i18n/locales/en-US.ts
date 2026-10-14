@@ -5087,6 +5087,7 @@ const enUS: Record<string, string> = {
   "chat.thirdPartyBalance.refreshAll": "Refresh all third-party balances",
   "chat.thirdPartyBalance.console": "Console",
   "chat.thirdPartyBalance.today": "Today",
+  "chat.thirdPartyBalance.todayTotal": "Spent today",
   "chat.thirdPartyBalance.usage": "Used {used}% · Left {left}%",
   "chat.thirdPartyBalance.planGrant": "Plan {used}/{limit}",
   "chat.thirdPartyBalance.setCookie": "Set Cookie",

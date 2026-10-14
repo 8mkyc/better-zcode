@@ -44,6 +44,7 @@ import { Button } from "@/components/ui/button.js";
 import { HighspeedModelIndicator } from "@/highspeed/HighspeedModelIndicator.js";
 import { formatHighspeedRemainingTime } from "@/highspeed/highspeedTime.js";
 import { ChatContextUsage } from "@/chat-input-toolbar/display.js";
+import { ThirdPartyBalanceTrigger } from "@/chat-input-toolbar/ThirdPartyBalanceTrigger.js";
 import {
   hasChatCodingPlanUsageRemaining,
   type ChatCodingPlanUsageRemainingConfig,
@@ -1098,6 +1099,8 @@ function V4ComposerModelControlsImpl({
           compressionDisabled={disabled || recoveryPending}
         />
       ) : null}
+      {/* 余额按钮（本 fork 新增）：点击弹第三方余额面板（含今日花费总额），随客户端原生渲染。 */}
+      <ThirdPartyBalanceTrigger />
       {/* 加速轮的模型由本次卡决定，选型菜单此时不可用，所以指示器优先于选型加载态。 */}
       {highspeedPresented && highspeedModel ? (
         <HighspeedModelIndicator

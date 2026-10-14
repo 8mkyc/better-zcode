@@ -4766,6 +4766,7 @@ const zhCN: Record<string, string> = {
   "chat.thirdPartyBalance.refreshAll": "刷新全部第三方余额",
   "chat.thirdPartyBalance.console": "控制台查看",
   "chat.thirdPartyBalance.today": "今日",
+  "chat.thirdPartyBalance.todayTotal": "今日花费",
   "chat.thirdPartyBalance.usage": "已用 {used}% · 剩 {left}%",
   "chat.thirdPartyBalance.planGrant": "计划 {used}/{limit}",
   "chat.thirdPartyBalance.setCookie": "设置 Cookie",

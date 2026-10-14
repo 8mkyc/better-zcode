@@ -208,6 +208,14 @@ export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: 
       .finally(() => setLoginBusy(false));
   };
   const todayLabel = intl.formatMessage({ id: "chat.thirdPartyBalance.today" });
+  // 今日花费总额 = 各家今日已用的正数之和（充值不抵扣花费语义）。
+  const spentValues = entries
+    .map((entry) => entry.todaySpentValue)
+    .filter((value): value is number => value !== null);
+  const totalSymbol = entries.find((entry) => entry.currencySymbol)?.currencySymbol ?? "¥";
+  const totalSpent = spentValues.reduce((sum, value) => sum + (value > 0 ? value : 0), 0);
+  const totalText =
+    spentValues.length === 0 ? "—" : `−${totalSymbol}${totalSpent.toFixed(2)}`;
   if (!supported) {
     return null;
   }
@@ -233,6 +241,12 @@ export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: 
         >
           <RefreshCwIcon key={refreshTick} className="size-3.5" />
         </button>
+      </div>
+      <div className="flex items-center justify-between gap-3 rounded-md bg-muted/40 px-2 py-1">
+        <span className="text-ui-sm text-foreground-subtle">
+          {intl.formatMessage({ id: "chat.thirdPartyBalance.todayTotal" })}
+        </span>
+        <span className="font-mono text-ui-sm font-medium text-foreground">{totalText}</span>
       </div>
       {entries.map((entry) => (
         <BalanceRow
