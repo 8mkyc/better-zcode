@@ -5086,6 +5086,16 @@ const enUS: Record<string, string> = {
   "chat.thirdPartyBalance.refresh": "Refresh this provider's balance",
   "chat.thirdPartyBalance.refreshAll": "Refresh all third-party balances",
   "chat.thirdPartyBalance.console": "Console",
+  "chat.thirdPartyBalance.today": "Today",
+  "chat.thirdPartyBalance.usage": "Used {used}% · Left {left}%",
+  "chat.thirdPartyBalance.planGrant": "Plan {used}/{limit}",
+  "chat.thirdPartyBalance.setCookie": "Set Cookie",
+  "chat.thirdPartyBalance.cookieExpired": "Session expired",
+  "chat.thirdPartyBalance.cookieDialog.title": "Connect MiMo Tokens Plan",
+  "chat.thirdPartyBalance.cookieDialog.description":
+    "The MiMo usage endpoint accepts login cookies only (API keys cannot read usage).\nHow to get it: sign in at platform.xiaomimimo.com → F12 → Network → pick any request to that site → copy the full Cookie request header below.\nCookies stay on this machine and are only sent to Xiaomi's official domain; re-paste when the session expires.",
+  "chat.thirdPartyBalance.cookieDialog.placeholder":
+    "Paste the full Cookie request header (contains api-platform_serviceToken etc.)",
   "chat.contextUsage.breakdown": "Context sources",
   "chat.contextUsage.breakdown.messages": "Messages",
   "chat.contextUsage.breakdown.systemPrompt": "System prompt",

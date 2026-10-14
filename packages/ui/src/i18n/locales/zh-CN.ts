@@ -4765,6 +4765,16 @@ const zhCN: Record<string, string> = {
   "chat.thirdPartyBalance.refresh": "刷新此厂商余额",
   "chat.thirdPartyBalance.refreshAll": "刷新全部第三方余额",
   "chat.thirdPartyBalance.console": "控制台查看",
+  "chat.thirdPartyBalance.today": "今日",
+  "chat.thirdPartyBalance.usage": "已用 {used}% · 剩 {left}%",
+  "chat.thirdPartyBalance.planGrant": "计划 {used}/{limit}",
+  "chat.thirdPartyBalance.setCookie": "设置 Cookie",
+  "chat.thirdPartyBalance.cookieExpired": "会话过期",
+  "chat.thirdPartyBalance.cookieDialog.title": "连接 MiMo Tokens Plan",
+  "chat.thirdPartyBalance.cookieDialog.description":
+    "MiMo 的用量接口只认登录 Cookie（API key 读不了）。\n取法：登录 platform.xiaomimimo.com → F12 → Network → 任选一个该站请求 → 复制 Cookie 请求头整串粘贴到下面。\nCookie 只存本机、只发给小米官方域；会话过期后重新粘贴即可。",
+  "chat.thirdPartyBalance.cookieDialog.placeholder":
+    "粘贴 Cookie 请求头整串（含 api-platform_serviceToken 等字段）",
   "chat.contextUsage.breakdown": "上下文来源",
   "chat.contextUsage.breakdown.messages": "消息",
   "chat.contextUsage.breakdown.systemPrompt": "系统提示词",

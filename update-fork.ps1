@@ -59,14 +59,17 @@ $env:ZCODE_FORK_STAGING = $Staging
 $env:ZCODE_FORK_ASAR = $AsarPath
 $repack = @'
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 const mod = await import("file:///C:/Users/c/code/ZCode/packages/desktop/scripts/app-asar-repack.mjs");
-const asarCli = "file:///C:/Users/c/code/ZCode/node_modules/@electron/asar/bin/asar.js";
+// Windows 上 file URL 的 .pathname 带前导斜杠（"/C:/..."），node 打不开；
+// 必须用 fileURLToPath 拿真实路径（2026-10-14 首次推送就是死在这里）。
+const asarCliPath = fileURLToPath("file:///C:/Users/c/code/ZCode/node_modules/@electron/asar/bin/asar.js");
 await mod.replaceAppAsarFromStaging({
   sourceDir: process.env.ZCODE_FORK_STAGING,
   appAsarPath: process.env.ZCODE_FORK_ASAR,
   targetPlatformKey: "win32-x64",
   runAsarCommand: (args) => {
-    const r = spawnSync("node", [new URL(asarCli).pathname.replace(/\//g, "\\"), ...args], { stdio: "inherit" });
+    const r = spawnSync("node", [asarCliPath, ...args], { stdio: "inherit" });
     if (r.status !== 0) throw new Error("asar pack failed");
   },
 });

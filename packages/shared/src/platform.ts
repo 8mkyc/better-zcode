@@ -238,7 +238,10 @@ export interface ApplicationIconRequest {
 /** 第三方模型厂商余额查询请求（本 fork 新增；main 进程按域名白名单代理 fetch）。 */
 export interface ThirdPartyBalanceFetchRequest {
   url: string;
-  apiKey: string;
+  /** bearer 模式（默认）用 API key；cookie 模式仅 xiaomimimo 放行、发整串 Cookie 头。 */
+  apiKey?: string;
+  authKind?: "bearer" | "cookie";
+  cookie?: string;
 }
 
 export type ThirdPartyBalanceFetchResponse =
