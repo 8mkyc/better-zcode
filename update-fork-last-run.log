@@ -1,5 +1,5 @@
-# update-fork 守候推送 2026-10-14 19:13:35
-[19:14:56] ZCode 已退出，开始推送…
+# update-fork 守候推送 2026-10-14 19:45:36
+[19:46:15] ZCode 已退出，开始推送…
 [1/5] tsc 类型检查…
 [2/5] 重建 desktop 包…
 apps/zcode-cli                           | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
@@ -93,7 +93,7 @@ apps/zcode-cli                           | 鈥塛ARN鈥?Unsupported engine: want
 > @zcode/browser-use-plugin@0.5.1 build C:\Users\c\code\ZCode\apps\zcode-cli\packages\browser-use-plugin
 > tsc && node scripts/build.mjs
 
-(node:2216) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(node:44232) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 apps/zcode-cli                           | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
 
@@ -103,7 +103,7 @@ apps/zcode-cli                           | 鈥塛ARN鈥?Unsupported engine: want
 
   dist\zcode.cjs  14.4mb
 
-Done in 2985ms
+Done in 1068ms
 [stage:agent-bundle] staged C:\Users\c\code\ZCode\packages\desktop\bundled-agents\win32-x64\glm\zcode.cjs
 ==> Building remote official plugin runtime: @zcode/android-emulator-plugin
 .                                        | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
@@ -202,7 +202,7 @@ Done in 2985ms
 ==> Preparing native search tools from repository archives
     platform: linux-arm64
     target:   C:\Users\c\code\ZCode\packages\desktop\mock-cdn\releases\3.15.1\tools\linux-arm64
-(node:63616) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(node:62824) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
 (Use `node --trace-deprecation ...` to show where the warning was created)
     [skip] bfs v4.1.1-2 宸插瓨鍦?    [skip] ugrep v7.8.4-1 宸插瓨鍦?    [skip] ripgrep v14.1.1-1 宸插瓨鍦?==> Done! native search tools (linux-arm64) -> C:\Users\c\code\ZCode\packages\desktop\mock-cdn\releases\3.15.1\tools\linux-arm64
 ==> Preparing native search tools from repository archives
@@ -247,7 +247,7 @@ Done in 2985ms
   [skip] component ripgrep darwin-x64 unchanged
   [ok] mock-cdn releases/3.15.1/manifest-darwin-x64.json
 ==> Done! Mock CDN release ready at C:\Users\c\code\ZCode\packages\desktop\mock-cdn\releases\3.15.1
-[ci][timer] prepare-runtime-assets:prepare:remote-assets end duration_ms=101177
+[ci][timer] prepare-runtime-assets:prepare:remote-assets end duration_ms=87417
 [ci][timer] prepare-runtime-assets:prepare:agent-bundle start
 ../../apps/zcode-cli                     | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
 
@@ -311,7 +311,7 @@ apps/zcode-cli                           | 鈥塛ARN鈥?Unsupported engine: want
 > @zcode/browser-use-plugin@0.5.1 build C:\Users\c\code\ZCode\apps\zcode-cli\packages\browser-use-plugin
 > tsc && node scripts/build.mjs
 
-(node:62856) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(node:43096) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 apps/zcode-cli                           | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
 
@@ -321,7 +321,7 @@ apps/zcode-cli                           | 鈥塛ARN鈥?Unsupported engine: want
 
   dist\zcode.cjs  14.4mb
 
-Done in 1166ms
+Done in 1000ms
 [stage:agent-bundle] staged C:\Users\c\code\ZCode\packages\desktop\bundled-agents\win32-x64\glm\zcode.cjs
 [prepare:agent-bundle] building @zcode/android-emulator-plugin runtime ...
 .                                        | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
@@ -367,9 +367,9 @@ Done in 1166ms
 [prepare:agent-bundle] staged bundled skill pack packages/bundled-skills
 [prepare:agent-bundle] staged koffi into C:\Users\c\code\ZCode\packages\desktop\bundled-agents\win32-x64\glm\packages\zcode-cua-plugin\node_modules (win32-x64)
 [prepare:agent-bundle] Computer Use package does not declare sharp, skip sharp staging
-(node:43712) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(node:17444) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-[ci][timer] prepare-runtime-assets:prepare:agent-bundle end duration_ms=66551
+[ci][timer] prepare-runtime-assets:prepare:agent-bundle end duration_ms=62249
 [ci][timer] prepare-runtime-assets:prepare:native-search start
 ../../apps/zcode-cli                     | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
 
@@ -380,8 +380,8 @@ Done in 1166ms
     platform: win32-x64
     target:   C:\Users\c\code\ZCode\packages\desktop\bundled-tools\win32-x64
     [skip] ugrep v7.8.4-1 宸插瓨鍦?    [skip] ripgrep v14.1.1-1 宸插瓨鍦?==> Done! native search tools (win32-x64) -> C:\Users\c\code\ZCode\packages\desktop\bundled-tools\win32-x64
-[ci][timer] prepare-runtime-assets:prepare:native-search end duration_ms=646
-(node:41352) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+[ci][timer] prepare-runtime-assets:prepare:native-search end duration_ms=611
+(node:36236) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 ../../apps/zcode-cli                     | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
 
@@ -394,8 +394,8 @@ Done in 1166ms
 > node scripts/build-metadata.mjs
 
 [build-meta] wrote C:\Users\c\code\ZCode\packages\desktop\out\metadata\build-meta.json
-[build-meta] commit=a7425966 time=2026-10-14T11:17:47.988Z
-(node:21748) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+[build-meta] commit=bc7cacc4 time=2026-10-14T11:49:01.701Z
+(node:13812) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 ../../apps/zcode-cli                     | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
 ../../apps/zcode-cli                     | 鈥塛ARN鈥?Unsupported engine: wanted: {"node":"24.14.0"} (current: {"node":"v24.16.0","pnpm":"10.33.2"})
@@ -420,77 +420,77 @@ Done in 1166ms
 [2m[[22mHOST[2m][22m [34mCLI[39m Using tsup config: C:\Users\c\code\ZCode\packages\desktop\tsup.config.ts
 [2m[[22mSCHEDULER[2m][22m [34mCLI[39m tsup v8.5.1
 [2m[[22mSCHEDULER[2m][22m [34mCLI[39m Using tsup config: C:\Users\c\code\ZCode\packages\desktop\tsup.config.ts
-[2m[[22mMAIN[2m][22m [34mCLI[39m Target: node22
-[2m[[22mMAIN[2m][22m [34mESM[39m Build start
 [2m[[22mHOST[2m][22m [34mCLI[39m Target: node22
 [2m[[22mHOST[2m][22m [34mESM[39m Build start
-[2m[[22mPRELOAD[2m][22m [34mCLI[39m Target: node22
-[2m[[22mPRELOAD[2m][22m [34mCJS[39m Build start
-[2m[[22mPLUGIN-SANDBOX-ALIAS[2m][22m [34mCLI[39m Target: es2022
-[2m[[22mPLUGIN-SANDBOX-ALIAS[2m][22m [34mIIFE[39m Build start
+[2m[[22mMAIN[2m][22m [34mCLI[39m Target: node22
+[2m[[22mMAIN[2m][22m [34mESM[39m Build start
 [2m[[22mSCHEDULER[2m][22m [34mCLI[39m Target: node22
 [2m[[22mSCHEDULER[2m][22m [34mESM[39m Build start
-[2m[[22mPLUGIN-SANDBOX-ALIAS[2m][22m [32mIIFE[39m [1mout\plugin-sandbox\gen-ui.js               [22m[32m625.36 KB[39m
+[2m[[22mPLUGIN-SANDBOX-ALIAS[2m][22m [34mCLI[39m Target: es2022
+[2m[[22mPLUGIN-SANDBOX-ALIAS[2m][22m [34mIIFE[39m Build start
+[2m[[22mPRELOAD[2m][22m [34mCLI[39m Target: node22
+[2m[[22mPRELOAD[2m][22m [34mCJS[39m Build start
 [2m[[22mPLUGIN-SANDBOX-ALIAS[2m][22m [32mIIFE[39m [1mout\plugin-sandbox\plugin-sandbox-alias.js [22m[32m619.02 KB[39m
-[2m[[22mPLUGIN-SANDBOX-ALIAS[2m][22m [32mIIFE[39m 鈿★笍 Build success in 255ms
-[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\browserVideoRecorder.cjs            [22m[32m140.00 B[39m
-[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\codingPlanWebview.cjs               [22m[32m715.20 KB[39m
-[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\rewardsWebview.cjs                  [22m[32m706.29 KB[39m
-[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\embeddedBrowserJavaScriptDialog.cjs [22m[32m716.38 KB[39m
-[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\cuaPermissionPanel.cjs              [22m[32m713.46 KB[39m
-[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\index.cjs                           [22m[32m736.81 KB[39m
-[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\resourceManager.cjs                 [22m[32m714.54 KB[39m
-[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\pluginSandbox.cjs                   [22m[32m705.04 KB[39m
-[2m[[22mPRELOAD[2m][22m [32mCJS[39m 鈿★笍 Build success in 659ms
-[2m[[22mSCHEDULER[2m][22m [32mESM[39m [1mout\scheduler\chunk-BJWO5ZFG.js [22m[32m1.42 KB[39m
-[2m[[22mSCHEDULER[2m][22m [32mESM[39m [1mout\scheduler\chunk-SIWU46CH.js [22m[32m107.00 B[39m
-[2m[[22mSCHEDULER[2m][22m [32mESM[39m [1mout\scheduler\index.js          [22m[32m1008.39 KB[39m
-[2m[[22mSCHEDULER[2m][22m [32mESM[39m 鈿★笍 Build success in 984ms
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-TEQZ5KZF.js     [22m[32m187.34 KB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-MG7DPVBW.js     [22m[32m140.00 B[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\tasksStorageWorker.js [22m[32m616.00 B[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-D6Z4PEDY.js     [22m[32m1.31 KB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-V3XV6UOE.js     [22m[32m10.67 KB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-GVUF52NR.js     [22m[32m96.16 KB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-UZHBXWKE.js     [22m[32m202.00 B[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-LHD5CEB2.js     [22m[32m152.00 B[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-2K4GER5L.js     [22m[32m131.88 KB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-RGHYKACI.js     [22m[32m11.88 KB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-PKV6ZKYF.js     [22m[32m572.00 B[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-P4WDMNFQ.js     [22m[32m872.00 B[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-EYXXGXVT.js     [22m[32m6.48 KB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-IHFOPQSJ.js     [22m[32m17.67 KB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-CYRQDXD6.js     [22m[32m857.00 B[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\index.js              [22m[32m1.50 MB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-LWNHD3CW.js     [22m[32m721.00 B[39m
-[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-RI2K7PUS.js     [22m[32m803.68 KB[39m
-[2m[[22mHOST[2m][22m [32mESM[39m 鈿★笍 Build success in 1083ms
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\browserWebmRecorder.js [22m[32m153.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-7MDOJWFD.js      [22m[32m16.58 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-CSIIKV34.js      [22m[32m96.28 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\storageScanWorker.js   [22m[32m824.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-Q7Q3CRBP.js      [22m[32m11.70 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-M5ZMGMSN.js      [22m[32m1.87 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\zcodeDataSizeWorker.js [22m[32m330.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-4YTRXD4W.js      [22m[32m151.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-MPY4YMRU.js      [22m[32m997.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-3B7FGOSW.js      [22m[32m50.96 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-QHFKNMKP.js      [22m[32m10.69 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-LAL7LAAG.js      [22m[32m11.90 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-4GQWRIAN.js      [22m[32m152.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-J7WQRTHM.js      [22m[32m202.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-VVWVGULM.js      [22m[32m887.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-H4E3UKFH.js      [22m[32m583.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-ZC6UX3TX.js      [22m[32m6.50 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-CXN7RD5R.js      [22m[32m770.00 B[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-ZGFJHKRU.js      [22m[32m15.60 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\index.js               [22m[32m765.58 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-52JM2SLI.js      [22m[32m780.31 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-QZTPHCRC.js      [22m[32m218.10 KB[39m
-[2m[[22mMAIN[2m][22m [32mESM[39m 鈿★笍 Build success in 1198ms
+[2m[[22mPLUGIN-SANDBOX-ALIAS[2m][22m [32mIIFE[39m [1mout\plugin-sandbox\gen-ui.js               [22m[32m625.36 KB[39m
+[2m[[22mPLUGIN-SANDBOX-ALIAS[2m][22m [32mIIFE[39m 鈿★笍 Build success in 132ms
 [36mvite v8.0.8 [32mbuilding client environment for production...[36m[39m
 [2K
-transforming...鉁?8095 modules transformed.
+transforming...[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\browserVideoRecorder.cjs            [22m[32m140.00 B[39m
+[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\codingPlanWebview.cjs               [22m[32m715.20 KB[39m
+[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\embeddedBrowserJavaScriptDialog.cjs [22m[32m716.38 KB[39m
+[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\resourceManager.cjs                 [22m[32m714.54 KB[39m
+[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\rewardsWebview.cjs                  [22m[32m706.29 KB[39m
+[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\index.cjs                           [22m[32m736.81 KB[39m
+[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\pluginSandbox.cjs                   [22m[32m705.04 KB[39m
+[2m[[22mPRELOAD[2m][22m [32mCJS[39m [1mout\preload\cuaPermissionPanel.cjs              [22m[32m713.46 KB[39m
+[2m[[22mPRELOAD[2m][22m [32mCJS[39m 鈿★笍 Build success in 774ms
+[2m[[22mSCHEDULER[2m][22m [32mESM[39m [1mout\scheduler\chunk-BJWO5ZFG.js [22m[32m1.42 KB[39m
+[2m[[22mSCHEDULER[2m][22m [32mESM[39m [1mout\scheduler\index.js          [22m[32m1008.39 KB[39m
+[2m[[22mSCHEDULER[2m][22m [32mESM[39m [1mout\scheduler\chunk-SIWU46CH.js [22m[32m107.00 B[39m
+[2m[[22mSCHEDULER[2m][22m [32mESM[39m 鈿★笍 Build success in 1123ms
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\tasksStorageWorker.js [22m[32m616.00 B[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-MG7DPVBW.js     [22m[32m140.00 B[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-UZHBXWKE.js     [22m[32m202.00 B[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-3VXXQDRQ.js     [22m[32m187.34 KB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-D6Z4PEDY.js     [22m[32m1.31 KB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-773EAYOH.js     [22m[32m10.67 KB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-LHD5CEB2.js     [22m[32m152.00 B[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-VY52VFKI.js     [22m[32m96.16 KB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-VIYZJE5I.js     [22m[32m857.00 B[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-PKV6ZKYF.js     [22m[32m572.00 B[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-IDFZKPYW.js     [22m[32m131.88 KB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-RGHYKACI.js     [22m[32m11.88 KB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-IHFOPQSJ.js     [22m[32m17.67 KB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-LWNHD3CW.js     [22m[32m721.00 B[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-P4WDMNFQ.js     [22m[32m872.00 B[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-EYXXGXVT.js     [22m[32m6.48 KB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\chunk-ZEMJCLZ6.js     [22m[32m803.68 KB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m [1mout\host\index.js              [22m[32m1.50 MB[39m
+[2m[[22mHOST[2m][22m [32mESM[39m 鈿★笍 Build success in 1415ms
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-3RR62ZBI.js      [22m[32m96.28 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-W4BQBCD3.js      [22m[32m16.58 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\browserWebmRecorder.js [22m[32m153.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\zcodeDataSizeWorker.js [22m[32m330.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\storageScanWorker.js   [22m[32m824.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-2OGNMFUR.js      [22m[32m218.10 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-Q7Q3CRBP.js      [22m[32m11.70 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-M5ZMGMSN.js      [22m[32m1.87 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-MPY4YMRU.js      [22m[32m997.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-4YTRXD4W.js      [22m[32m151.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-J7WQRTHM.js      [22m[32m202.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-H4E3UKFH.js      [22m[32m583.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-ZC6UX3TX.js      [22m[32m6.50 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-4GQWRIAN.js      [22m[32m152.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-MQZHWQ4N.js      [22m[32m10.69 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-Q4OIBKYO.js      [22m[32m50.96 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-LAL7LAAG.js      [22m[32m11.90 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-VVWVGULM.js      [22m[32m887.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-CXN7RD5R.js      [22m[32m770.00 B[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\index.js               [22m[32m765.93 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-37ICOIWH.js      [22m[32m780.31 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m [1mout\main\chunk-ZGFJHKRU.js      [22m[32m15.60 KB[39m
+[2m[[22mMAIN[2m][22m [32mESM[39m 鈿★笍 Build success in 1421ms
+鉁?8096 modules transformed.
 rendering chunks...
 computing gzip size...
 out/renderer/pdfjs/cmaps/CNS2-V.bcmap                                    0.09 kB
@@ -758,7 +758,7 @@ out/renderer/assets/pdf.worker.min-qwK7q_zL.mjs                      1,046.21 kB
 out/renderer/assets/docx_wasm_bg-HWnIvdMf.wasm                       1,119.33 kB 鈹?gzip:   443.20 kB
 out/renderer/assets/duke_sheets_wasm_bg-BCCK9PkU.wasm                4,345.44 kB 鈹?gzip: 1,663.17 kB
 out/renderer/assets/pdf-viewer-Dgb4oCkS.css                              1.49 kB 鈹?gzip:     0.59 kB
-out/renderer/assets/styles-Ds5JtzdM.css                                452.23 kB 鈹?gzip:    71.79 kB
+out/renderer/assets/styles-C7QjS6ym.css                                452.20 kB 鈹?gzip:    71.78 kB
 out/renderer/assets/mermaid-GHXKKRXX-CMW62br5.js                         0.07 kB 鈹?gzip:     0.08 kB
 out/renderer/assets/x-a-pLm32N.js                                        0.07 kB 鈹?gzip:     0.08 kB
 out/renderer/assets/ban-ChsPfau3.js                                      0.07 kB 鈹?gzip:     0.08 kB
@@ -1007,7 +1007,7 @@ out/renderer/assets/message-circle-check-CPBlJmgq.js                     0.09 kB
 out/renderer/assets/message-circle-reply-Cqx4AU5V.js                     0.09 kB 鈹?gzip:     0.10 kB
 out/renderer/assets/square-mouse-pointer-lM7TWJlk.js                     0.09 kB 鈹?gzip:     0.10 kB
 out/renderer/assets/git-commit-horizontal-BeAtcjYr.js                    0.09 kB 鈹?gzip:     0.10 kB
-out/renderer/assets/previewPaneOfficeContent-Do6inHE-.js                 0.09 kB 鈹?gzip:     0.09 kB
+out/renderer/assets/previewPaneOfficeContent-DGHqCdRK.js                 0.09 kB 鈹?gzip:     0.09 kB
 out/renderer/assets/square-arrow-right-enter-BGGtJ_TF.js                 0.09 kB 鈹?gzip:     0.11 kB
 out/renderer/assets/message-circle-question-mark-BgJYBXHJ.js             0.10 kB 鈹?gzip:     0.11 kB
 out/renderer/assets/array-BcoM8JmB.js                                    0.10 kB 鈹?gzip:     0.11 kB 鈹?map:      0.52 kB
@@ -2788,7 +2788,7 @@ out/renderer/assets/previewPanePdfContent-DUYc-tAL.js                    1.10 kB
 out/renderer/assets/logger-CFGVIJJk.js                                   1.13 kB 鈹?gzip:     0.57 kB 鈹?map:      5.94 kB
 out/renderer/assets/csv-CJ9_VZbB.js                                      1.13 kB 鈹?gzip:     0.36 kB 鈹?map:      1.97 kB
 out/renderer/assets/csv-DSReKLZ0.js                                      1.13 kB 鈹?gzip:     0.36 kB 鈹?map:      1.95 kB
-out/renderer/assets/resource-manager-CdpqQVgQ.js                         1.14 kB 鈹?gzip:     0.55 kB 鈹?map:      3.72 kB
+out/renderer/assets/resource-manager-DLgmRAth.js                         1.14 kB 鈹?gzip:     0.55 kB 鈹?map:      3.72 kB
 out/renderer/assets/isEmpty-Bo9CD5wD.js                                  1.16 kB 鈹?gzip:     0.63 kB 鈹?map:      7.89 kB
 out/renderer/assets/ordinal-CPCD4o3P.js                                  1.18 kB 鈹?gzip:     0.57 kB 鈹?map:      4.66 kB
 out/renderer/assets/preload-helper-0QKNGuVM.js                           1.20 kB 鈹?gzip:     0.68 kB
@@ -2829,7 +2829,7 @@ out/renderer/assets/erb-Bq1kYOMP.js                                      2.13 kB
 out/renderer/assets/erb-DrR54ZKl.js                                      2.13 kB 鈹?gzip:     0.62 kB 鈹?map:      3.26 kB
 out/renderer/assets/wenyan-BprY5O0t.js                                   2.15 kB 鈹?gzip:     1.08 kB 鈹?map:      3.16 kB
 out/renderer/assets/wenyan-DXurD1U4.js                                   2.15 kB 鈹?gzip:     1.08 kB 鈹?map:      3.14 kB
-out/renderer/assets/usageStatsUiParts-MZkb5Kuq.js                        2.22 kB 鈹?gzip:     0.93 kB 鈹?map:      8.70 kB
+out/renderer/assets/usageStatsUiParts-DhBTbL91.js                        2.22 kB 鈹?gzip:     0.93 kB 鈹?map:      8.70 kB
 out/renderer/assets/jssm-CDgf8hNq.js                                     2.23 kB 鈹?gzip:     0.61 kB 鈹?map:      3.37 kB
 out/renderer/assets/jssm-DexPY8FQ.js                                     2.23 kB 鈹?gzip:     0.61 kB 鈹?map:      3.35 kB
 out/renderer/assets/edge-CeJ5C96h.js                                     2.30 kB 鈹?gzip:     0.67 kB 鈹?map:      3.51 kB
@@ -2878,8 +2878,8 @@ out/renderer/assets/vala-ErHiy48Y.js                                     3.36 kB
 out/renderer/assets/symbol-DHKJCkGK.js                                   3.42 kB 鈹?gzip:     1.29 kB 鈹?map:     14.26 kB
 out/renderer/assets/splunk-Bjk1SxxB.js                                   3.42 kB 鈹?gzip:     1.51 kB 鈹?map:      4.42 kB
 out/renderer/assets/splunk-CCfH0XA4.js                                   3.42 kB 鈹?gzip:     1.51 kB 鈹?map:      4.40 kB
-out/renderer/assets/previewPaneOfficeContent-DIRuxZXV.js                 3.43 kB 鈹?gzip:     1.58 kB 鈹?map:      5.78 kB
-out/renderer/assets/CodingPlanUsageLineChart-BYk_pvWN.js                 3.44 kB 鈹?gzip:     1.56 kB 鈹?map:     11.22 kB
+out/renderer/assets/previewPaneOfficeContent-DpcsFJhr.js                 3.43 kB 鈹?gzip:     1.59 kB 鈹?map:      5.78 kB
+out/renderer/assets/CodingPlanUsageLineChart-Ded6b3LJ.js                 3.44 kB 鈹?gzip:     1.56 kB 鈹?map:     11.22 kB
 out/renderer/assets/arc-Caa31hgM.js                                      3.47 kB 鈹?gzip:     1.46 kB 鈹?map:     15.14 kB
 out/renderer/assets/chunk-336JU56O-BjgpDlO3.js                           3.50 kB 鈹?gzip:     1.59 kB 鈹?map:      6.11 kB
 out/renderer/assets/hurl-BKkkWlBR.js                                     3.51 kB 鈹?gzip:     1.10 kB 鈹?map:      5.40 kB
@@ -2917,7 +2917,7 @@ out/renderer/assets/nextflow-6lc9aVIS.js                                 4.50 kB
 out/renderer/assets/nextflow-DzsvaG-_.js                                 4.50 kB 鈹?gzip:     1.16 kB 鈹?map:      6.78 kB
 out/renderer/assets/rosmsg-C6S42iVo.js                                   4.51 kB 鈹?gzip:     1.05 kB 鈹?map:      6.71 kB
 out/renderer/assets/rosmsg-CTzzIPrO.js                                   4.51 kB 鈹?gzip:     1.05 kB 鈹?map:      6.73 kB
-out/renderer/assets/AppUsageDailyModelTrendChart-C1an-exZ.js             4.51 kB 鈹?gzip:     1.93 kB 鈹?map:     15.97 kB
+out/renderer/assets/AppUsageDailyModelTrendChart-BQCt9iTB.js             4.51 kB 鈹?gzip:     1.93 kB 鈹?map:     15.97 kB
 out/renderer/assets/mermaid-parser.core-2t-WZk1A.js                      4.55 kB 鈹?gzip:     1.44 kB 鈹?map:      9.89 kB
 out/renderer/assets/defaultLocale-DRuFys3a.js                            4.64 kB 鈹?gzip:     2.12 kB 鈹?map:     20.68 kB
 out/renderer/assets/polar-BMhdGDpf.js                                    4.66 kB 鈹?gzip:     1.12 kB 鈹?map:      7.23 kB
@@ -2965,7 +2965,7 @@ out/renderer/assets/shaderlab-C8Fp7rGA.js                                5.91 kB
 out/renderer/assets/shaderlab-CbPbrbrU.js                                5.91 kB 鈹?gzip:     2.08 kB 鈹?map:      7.68 kB
 out/renderer/assets/verilog-D8-rcKnx.js                                  5.92 kB 鈹?gzip:     1.89 kB 鈹?map:      7.98 kB
 out/renderer/assets/verilog-dbrOZA28.js                                  5.92 kB 鈹?gzip:     1.89 kB 鈹?map:      8.00 kB
-out/renderer/assets/CodingPlanUsageBarChart-BsQUjbf2.js                  5.94 kB 鈹?gzip:     2.27 kB 鈹?map:     20.88 kB
+out/renderer/assets/CodingPlanUsageBarChart-DuUCsu-2.js                  5.94 kB 鈹?gzip:     2.27 kB 鈹?map:     20.88 kB
 out/renderer/assets/cypher-Bluk4Fa1.js                                   5.94 kB 鈹?gzip:     1.71 kB 鈹?map:      8.42 kB
 out/renderer/assets/cypher-Dr9uSKii.js                                   5.94 kB 鈹?gzip:     1.71 kB 鈹?map:      8.40 kB
 out/renderer/assets/vb-DJQSL0NR.js                                       6.08 kB 鈹?gzip:     2.33 kB 鈹?map:      8.02 kB
@@ -3227,7 +3227,7 @@ out/renderer/assets/viml-BNFW5rQT.js                                    20.35 kB
 out/renderer/assets/viml-CSB4JGEI.js                                    20.35 kB 鈹?gzip:     6.73 kB 鈹?map:     23.46 kB
 out/renderer/assets/nushell-B2Ky2e1w.js                                 20.40 kB 鈹?gzip:     5.21 kB 鈹?map:     27.64 kB
 out/renderer/assets/nushell-D4gR7YkX.js                                 20.40 kB 鈹?gzip:     5.21 kB 鈹?map:     27.62 kB
-out/renderer/assets/AppUsageModelUsagePieChart-BS7qBCwD.js              20.71 kB 鈹?gzip:     6.62 kB 鈹?map:     76.11 kB
+out/renderer/assets/AppUsageModelUsagePieChart-C8ejXr8-.js              20.71 kB 鈹?gzip:     6.62 kB 鈹?map:     76.11 kB
 out/renderer/assets/snazzy-light-Culrv_UR.js                            20.77 kB 鈹?gzip:     3.80 kB 鈹?map:     27.98 kB
 out/renderer/assets/snazzy-light-kSMF8NGd.js                            20.77 kB 鈹?gzip:     3.80 kB 鈹?map:     27.99 kB
 out/renderer/assets/twig-bv3hXQgj.js                                    20.90 kB 鈹?gzip:     3.66 kB 鈹?map:     29.18 kB
@@ -3303,7 +3303,7 @@ out/renderer/assets/nord-HFjzXe8x.js                                    26.72 kB
 out/renderer/assets/erDiagram-SMLLAGMA-B8zLKULW.js                      26.81 kB 鈹?gzip:     9.33 kB 鈹?map:     85.01 kB
 out/renderer/assets/codeql-Bf07-Bkt.js                                  26.87 kB 鈹?gzip:     3.79 kB 鈹?map:     35.99 kB
 out/renderer/assets/codeql-BiajN51O.js                                  26.87 kB 鈹?gzip:     3.79 kB 鈹?map:     35.97 kB
-out/renderer/assets/index-Crc1MGIM.js                                   27.09 kB 鈹?gzip:     7.69 kB 鈹?map:     88.32 kB
+out/renderer/assets/index-CaG0QWVA.js                                   27.09 kB 鈹?gzip:     7.69 kB 鈹?map:     88.32 kB
 out/renderer/assets/rough.esm-CT4l0Jgn.js                               27.10 kB 鈹?gzip:     8.85 kB 鈹?map:     71.32 kB
 out/renderer/assets/bundle-mjs-NgEMvpXV.js                              27.25 kB 鈹?gzip:     8.67 kB 鈹?map:    139.70 kB
 out/renderer/assets/scss-B6yTRilA.js                                    27.25 kB 鈹?gzip:     4.22 kB 鈹?map:     38.31 kB
@@ -3425,7 +3425,7 @@ out/renderer/assets/latex-BOPE0hRK.js                                   72.61 kB
 out/renderer/assets/latex-WkTVsvbu.js                                   72.61 kB 鈹?gzip:     6.68 kB 鈹?map:    100.55 kB
 out/renderer/assets/vyper-BJlqe1dE.js                                   74.64 kB 鈹?gzip:    10.69 kB 鈹?map:    100.66 kB
 out/renderer/assets/vyper-C1MlcZ3U.js                                   74.64 kB 鈹?gzip:    10.69 kB 鈹?map:    100.68 kB
-out/renderer/assets/src-CLzu9-Jt.js                                     79.38 kB 鈹?gzip:    27.78 kB 鈹?map:    657.69 kB
+out/renderer/assets/src-CLzu9-Jt.js                                     79.38 kB 鈹?gzip:    27.78 kB 鈹?map:    657.87 kB
 out/renderer/assets/hack-BWbk-9PB.js                                    80.18 kB 鈹?gzip:    26.27 kB 鈹?map:     97.26 kB
 out/renderer/assets/hack-D0dmFxZa.js                                    80.18 kB 鈹?gzip:    26.27 kB 鈹?map:     97.28 kB
 out/renderer/assets/cose-bilkent-S5V4N54A-CZKEgjI6.js                   81.39 kB 鈹?gzip:    21.56 kB 鈹?map:    285.22 kB
@@ -3485,11 +3485,11 @@ out/renderer/assets/cpp-Bdne2oBX.js                                    626.12 kB
 out/renderer/assets/cpp-CRYwMr5c.js                                    626.12 kB 鈹?gzip:    48.09 kB 鈹?map:    816.08 kB
 out/renderer/assets/emacs-lisp-CxSeR8S5.js                             779.84 kB 鈹?gzip:   197.53 kB 鈹?map:    789.78 kB
 out/renderer/assets/emacs-lisp-BnXpV-Nq.js                             779.87 kB 鈹?gzip:   197.55 kB 鈹?map:    789.80 kB
-out/renderer/assets/IntlProvider-CTQeBaOg.js                           857.64 kB 鈹?gzip:   207.11 kB 鈹?map:  1,214.42 kB
+out/renderer/assets/IntlProvider-Bvr-RDcF.js                           859.30 kB 鈹?gzip:   207.72 kB 鈹?map:  1,216.52 kB
 out/renderer/assets/previewPaneOfficeLegacyDocContent-B10J-IAR.js      900.63 kB 鈹?gzip:   261.99 kB 鈹?map:  4,062.94 kB
 out/renderer/assets/pptxRendererPreviewEngine-CquPQfwu.js            1,042.71 kB 鈹?gzip:   328.59 kB 鈹?map:  2,972.02 kB
-out/renderer/assets/previewPaneOfficeXlsxContent-Bwmc5Qb6.js         2,154.74 kB 鈹?gzip:   697.38 kB 鈹?map:  7,239.51 kB
-out/renderer/assets/styles-BTVKjlEC.js                               6,461.20 kB 鈹?gzip: 1,816.17 kB 鈹?map: 24,119.45 kB
+out/renderer/assets/previewPaneOfficeXlsxContent-B6O042rv.js         2,154.74 kB 鈹?gzip:   697.39 kB 鈹?map:  7,239.51 kB
+out/renderer/assets/styles-DKmSNsrW.js                               6,467.30 kB 鈹?gzip: 1,817.61 kB 鈹?map: 24,142.11 kB
 
 [plugin builtin:vite-reporter] 
 (!) Some chunks are larger than 500 kB after minification. Consider:
@@ -3497,16 +3497,28 @@ out/renderer/assets/styles-BTVKjlEC.js                               6,461.20 kB
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
 [PLUGIN_TIMINGS] Warning: Your build spent significant time in plugins. Here is a breakdown:
-  - vite:css-post (40%)
-  - vite:asset (30%)
-  - vite:build-import-analysis (19%)
-  - vite:worker (8%)
+  - vite:build-import-analysis (35%)
+  - vite:css-post (23%)
+  - vite:terser (19%)
+  - vite:asset (14%)
+  - vite:worker (9%)
 See https://rolldown.rs/options/checks#plugintimings for more details.
 
-[32m鉁?built in 31.88s[39m
-[3/5] 解包 app.asar 到 C:\Users\c\AppData\Local\Temp\zcode-fork-update-20261014191828\app …
+[32m鉁?built in 20.31s[39m
+[3/5] 解包 app.asar 到 C:\Users\c\AppData\Local\Temp\zcode-fork-update-20261014194924\app …
 [4/5] 覆盖新 out/ …
 [5/5] 重包并替换 app.asar（上游 unpack 规则）…
-REPACK_OK
-完成 ✔  旧包备份在 C:\Program Files\ZCode_mod\resources\app.asar.bak，启动 ZCode 验证。
-[19:22:00] 推送完成 ✔ 可以重开 ZCode 验证（hover 上下文占用看「第三方余额」段）。
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[Error: EBUSY: resource busy or locked, unlink 'C:\Program Files\ZCode_mod\resources\app.asar'] {
+  errno: -4082,
+  code: 'EBUSY',
+  syscall: 'unlink',
+  path: 'C:\\Program Files\\ZCode_mod\\resources\\app.asar'
+}
+
+Node.js v24.16.0
+重包失败！已中止（原包是否完好请看 C:\Program Files\ZCode_mod\resources\app.asar 与 .bak）。
+[19:52:23] 推送失败（exit=1），详见上方日志；可手动重跑 update-fork.ps1。

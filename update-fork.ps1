@@ -24,6 +24,22 @@ if (Get-Process ZCode -ErrorAction SilentlyContinue) {
     exit 1
 }
 if (-not (Test-Path $AsarPath)) { Write-Host "找不到 $AsarPath" -ForegroundColor Red; exit 1 }
+# app.asar 锁探测：曾因更新中途 ZCode 被重开导致 unlink EBUSY。提前探测、明确报错。
+$asarLocked = $true
+for ($i = 0; $i -lt 8; $i++) {
+    try {
+        $fs = [System.IO.File]::Open($AsarPath, 'Open', 'ReadWrite', 'None')
+        $fs.Close()
+        $asarLocked = $false
+        break
+    } catch {
+        Start-Sleep -Seconds 2
+    }
+}
+if ($asarLocked) {
+    Write-Host 'app.asar 仍被占用（16 秒未释放）。确认 ZCode 完全退出（含托盘）后重试。' -ForegroundColor Red
+    exit 1
+}
 
 Set-Location $Repo
 
@@ -76,8 +92,14 @@ await mod.replaceAppAsarFromStaging({
 console.log("REPACK_OK");
 '@
 $repack | Set-Content -Path (Join-Path $Work 'repack.mjs') -Encoding UTF8
-& node (Join-Path $Work 'repack.mjs')
-if ($LASTEXITCODE -ne 0 -or -not (Test-Path $AsarPath)) {
+$repacked = $false
+for ($try = 1; $try -le 2; $try++) {
+    & node (Join-Path $Work 'repack.mjs')
+    if ($LASTEXITCODE -eq 0 -and (Test-Path $AsarPath)) { $repacked = $true; break }
+    Write-Host "重包失败，第 $try 次重试（5 秒后）…" -ForegroundColor Yellow
+    Start-Sleep -Seconds 5
+}
+if (-not $repacked) {
     Write-Host "重包失败！已中止（原包是否完好请看 $AsarPath 与 .bak）。" -ForegroundColor Red
     exit 1
 }
