@@ -6,7 +6,8 @@
 
 export interface DailyBalanceStore {
   [providerId: string]: {
-    [date: string]: { balance: number; ts: number };
+    /** balance/ts = 当日最新；first/firstTs = 当日首次（无昨日基线时的兜底基线）。 */
+    [date: string]: { balance: number; ts: number; first?: number; firstTs?: number };
   };
 }
 
@@ -21,7 +22,7 @@ export function formatDateKey(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-/** 记录当日余额（同日覆盖为最新值）。返回新 store。 */
+/** 记录当日余额：同日覆盖最新值，但保留当日首次值（兜底基线用）。返回新 store。 */
 export function upsertObservation(
   store: DailyBalanceStore,
   providerId: string,
@@ -29,18 +30,26 @@ export function upsertObservation(
   now: Date,
 ): DailyBalanceStore {
   const date = formatDateKey(now);
+  const existing = store[providerId]?.[date];
   return {
     ...store,
     [providerId]: {
       ...store[providerId],
-      [date]: { balance, ts: now.getTime() },
+      [date]: {
+        balance,
+        ts: now.getTime(),
+        first: existing?.first ?? balance,
+        firstTs: existing?.firstTs ?? now.getTime(),
+      },
     },
   };
 }
 
 /**
- * 今日已用 = 基线余额 − 当前余额；基线 = 严格早于 today 的最近一次观测。
- * 无基线（第一天）返回 null。
+ * 今日已用 = 基线余额 − 当前余额。
+ * 基线取值两级：①严格早于 today 的最近一次观测（昨日收尾值，最准）；
+ * ②无昨日基线时兜底用当日首次观测（今天第一次查到的值，立刻有数、
+ * 口径为"自今日首次记录起的消耗"）；两条都没有（从未记录过）返回 null。
  */
 export function computeTodaySpent(
   store: DailyBalanceStore,
@@ -65,7 +74,14 @@ export function computeTodaySpent(
       baselineDate = date;
     }
   }
-  return baseline === null ? null : baseline.balance - currentBalance;
+  if (baseline !== null) {
+    return baseline.balance - currentBalance;
+  }
+  const todayObs = observations[today];
+  if (!todayObs) {
+    return null;
+  }
+  return (todayObs.first ?? todayObs.balance) - currentBalance;
 }
 
 /** 裁剪：每个 provider 只保留最近 keepDays 天（含今天）。返回新 store。 */

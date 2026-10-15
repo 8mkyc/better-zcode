@@ -32,9 +32,20 @@ describe("第三方余额日快照", () => {
     expect(computeTodaySpent(store, "ds", 92, day(2026, 10, 13))).toBe(3);
   });
 
-  it("无昨日基线（第一天）返回 null", () => {
+  it("无昨日基线时用当日首记录兜底（同值=0）", () => {
     const store = upsertObservation({}, "ds", 100, new Date(2026, 9, 13, 9, 0, 0));
-    expect(computeTodaySpent(store, "ds", 100, day(2026, 10, 13))).toBeNull();
+    expect(computeTodaySpent(store, "ds", 100, day(2026, 10, 13))).toBe(0);
+  });
+
+  it("无昨日基线时兜底=当日首次观测（后续消费算得出）", () => {
+    let store = upsertObservation({}, "ds", 100, new Date(2026, 9, 13, 8, 0, 0));
+    store = upsertObservation(store, "ds", 92, new Date(2026, 9, 13, 18, 0, 0));
+    // 首次 100 → 当前 92，兜底口径"自今日首次记录起"= 8
+    expect(computeTodaySpent(store, "ds", 92, day(2026, 10, 13))).toBe(8);
+  });
+
+  it("从未记录过返回 null", () => {
+    expect(computeTodaySpent({}, "ds", 100, day(2026, 10, 13))).toBeNull();
   });
 
   it("余额增加（充值）返回负数", () => {

@@ -80,7 +80,6 @@ function BalanceRow({
   todayLabel,
   showToday,
   showPlan,
-  onRefresh,
   onSetCookie,
   onLogin,
   loginBusy,
@@ -89,13 +88,13 @@ function BalanceRow({
   todayLabel: string;
   showToday: boolean;
   showPlan: boolean;
-  onRefresh: () => void;
   onSetCookie: () => void;
   onLogin: () => void;
   loginBusy: boolean;
 }) {
   const { intl } = useZCodeIntl();
-  const todayText = formatTodaySpent(entry);
+  // 无基线时给"—"占位：行上永远有「今日」位，不再像缺功能。
+  const todayText = formatTodaySpent(entry) ?? (entry.state === "ok" ? "—" : "");
   const monthUsageText = formatMonthUsage(entry, intl);
   const planGrantText = formatPlanGrant(entry, intl);
   return (
@@ -153,16 +152,6 @@ function BalanceRow({
                 {intl.formatMessage({ id: "chat.thirdPartyBalance.manualPaste" })}
               </button>
             </>
-          ) : null}
-          {entry.state !== "unsupported" && entry.state !== "error" ? (
-            <button
-              type="button"
-              aria-label={intl.formatMessage({ id: "chat.thirdPartyBalance.refresh" })}
-              className="text-foreground-subtlest transition-colors hover:text-foreground-subtle"
-              onClick={onRefresh}
-            >
-              <RefreshCwIcon className="size-3" />
-            </button>
           ) : null}
           {formatFetchedAt(entry.fetchedAt) ? (
             <span className="text-ui-sm text-foreground-subtlest">
@@ -313,7 +302,6 @@ export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: 
           todayLabel={todayLabel}
           showToday={settings.showToday}
           showPlan={settings.showPlan}
-          onRefresh={refresh}
           onLogin={startMimoLogin}
           loginBusy={loginBusy}
           onSetCookie={() => {
