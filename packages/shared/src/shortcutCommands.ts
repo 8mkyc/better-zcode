@@ -26,6 +26,8 @@ export type ShortcutCommandId =
   | "renameConversation"
   | "archiveConversation"
   | "deleteConversation"
+  | "pinConversation"
+  | "markConversationUnread"
   | "navigateBack"
   | "navigateForward"
   | "openModelMenu"
@@ -81,6 +83,9 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommandEntry[] = [
   // 归档/删除当前任务：F3/F4 与 F2 连号；同样经事件桥分发到 Header 的既有动作。
   { id: "archiveConversation", channel: "window", defaultBindings: ["F3"] },
   { id: "deleteConversation", channel: "window", defaultBindings: ["F4"] },
+  // 置顶切换 / 未读切换：F5/F6 补齐对话管理键位家族。
+  { id: "pinConversation", channel: "window", defaultBindings: ["F5"] },
+  { id: "markConversationUnread", channel: "window", defaultBindings: ["F6"] },
   { id: "navigateBack", channel: "window", defaultBindings: ["CmdOrCtrl+["] },
   { id: "navigateForward", channel: "window", defaultBindings: ["CmdOrCtrl+]"] },
   // composer 工具条动作（原固定热键转正）：显式 Ctrl 修饰（mac 上也是 Ctrl，

@@ -23,7 +23,9 @@ import { getPathLeaf } from "@/lib/path.js";
 import {
   requestActiveTaskArchive,
   requestActiveTaskDelete,
+  requestActiveTaskPin,
   requestActiveTaskRename,
+  requestActiveTaskUnreadToggle,
 } from "@/lib/taskRenameRequest.js";
 import {
   addPluginStoreOpenListener,
@@ -1040,6 +1042,8 @@ export function App({
     // 归档/删除当前任务：同样经事件桥走 Header 的既有动作链（均带确认弹窗）。
     archiveConversation: activeTaskId ? () => requestActiveTaskArchive() : null,
     deleteConversation: activeTaskId ? () => requestActiveTaskDelete() : null,
+    pinConversation: activeTaskId ? () => requestActiveTaskPin() : null,
+    markConversationUnread: activeTaskId ? () => requestActiveTaskUnreadToggle() : null,
     navigateBack: canPrimaryNavigationBack
       ? () => runVisibleWorkspaceCommand(handlePrimaryNavigationBack)
       : null,

@@ -1,6 +1,8 @@
 const TASK_RENAME_REQUEST_EVENT = "zcode:rename-active-task";
 const TASK_ARCHIVE_REQUEST_EVENT = "zcode:archive-active-task";
 const TASK_DELETE_REQUEST_EVENT = "zcode:delete-active-task";
+const TASK_PIN_REQUEST_EVENT = "zcode:pin-active-task";
+const TASK_UNREAD_REQUEST_EVENT = "zcode:unread-active-task";
 
 /**
  * 应用级「重命名/归档/删除当前任务」请求：快捷键等不具备任务上下文的入口经此转发，
@@ -41,4 +43,28 @@ export function addActiveTaskDeleteListener(listener: () => void): () => void {
   const handleRequest = () => listener();
   window.addEventListener(TASK_DELETE_REQUEST_EVENT, handleRequest);
   return () => window.removeEventListener(TASK_DELETE_REQUEST_EVENT, handleRequest);
+}
+
+export function requestActiveTaskPin(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(TASK_PIN_REQUEST_EVENT));
+}
+
+export function addActiveTaskPinListener(listener: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  const handleRequest = () => listener();
+  window.addEventListener(TASK_PIN_REQUEST_EVENT, handleRequest);
+  return () => window.removeEventListener(TASK_PIN_REQUEST_EVENT, handleRequest);
+}
+
+export function requestActiveTaskUnreadToggle(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(TASK_UNREAD_REQUEST_EVENT));
+}
+
+export function addActiveTaskUnreadToggleListener(listener: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  const handleRequest = () => listener();
+  window.addEventListener(TASK_UNREAD_REQUEST_EVENT, handleRequest);
+  return () => window.removeEventListener(TASK_UNREAD_REQUEST_EVENT, handleRequest);
 }
