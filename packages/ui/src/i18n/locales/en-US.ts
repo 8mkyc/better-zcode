@@ -5100,6 +5100,14 @@ const enUS: Record<string, string> = {
   "chat.thirdPartyBalance.cookieDialog.title": "Connect MiMo Tokens Plan",
   "chat.thirdPartyBalance.cookieDialog.description":
     "The MiMo usage endpoint accepts login cookies only (API keys cannot read usage).\nHow to get it: sign in at platform.xiaomimimo.com → F12 → Network → pick any request to that site → copy the full Cookie request header below.\nCookies stay on this machine and are only sent to Xiaomi's official domain; re-paste when the session expires.",
+  "chat.thirdPartyBalance.settings.title": "Balance panel settings",
+  "chat.thirdPartyBalance.settings.showToday": "Show \"today\" usage (money / percent)",
+  "chat.thirdPartyBalance.settings.showTodayTotal": "Show \"spent today\" total",
+  "chat.thirdPartyBalance.settings.showPlan": "Show plan grant caption",
+  "chat.thirdPartyBalance.settings.refresh": "Refresh interval (minutes)",
+  "chat.thirdPartyBalance.settings.order": "Display order",
+  "chat.thirdPartyBalance.settings.up": "Move up",
+  "chat.thirdPartyBalance.settings.down": "Move down",
   "chat.thirdPartyBalance.cookieDialog.placeholder":
     "Paste the full Cookie request header (contains api-platform_serviceToken etc.)",
   "chat.contextUsage.breakdown": "Context sources",

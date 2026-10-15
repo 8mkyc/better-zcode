@@ -19,6 +19,7 @@ import {
   loadStore as loadDailyStore,
   recordBalanceObservation,
 } from "@/lib/thirdPartyBalanceDaily.js";
+import { loadBalanceSettings } from "@/lib/thirdPartyBalanceSettings.js";
 import { useOptionalPlatform } from "@/hooks/usePlatform.js";
 import { useProviderSettingsView } from "@/hooks/useProviderSettingsView.js";
 
@@ -32,6 +33,8 @@ export interface ThirdPartyBalanceEntry {
   balanceText: string | null;
   /** 今日已用（元）：正=消费、负=余额增加；无基线为 null。 */
   todaySpentValue: number | null;
+  /** 百分比型（mimo）：今日消耗百分点（正=今日花掉的百分比）；无基线为 null。 */
+  todayPercentValue: number | null;
   /** 余额币种符号（¥/$…），用于格式化今日已用。 */
   currencySymbol: string | null;
   /** mimo：月度窗口消耗比（0..1），面板负责本地化格式化。 */
@@ -64,7 +67,6 @@ interface BalanceCachePayload {
 }
 
 const CACHE_KEY = "zcode:third-party-balances";
-const CACHE_TTL_MS = 5 * 60 * 1000;
 const MIMO_COOKIE_KEY = "zcode:mimoCookie";
 const MIMO_USAGE_URL = "https://platform.xiaomimimo.com/api/v1/tokenPlan/usage";
 
@@ -285,6 +287,14 @@ export function useThirdPartyBalances(options?: { refreshSignal?: number }) {
         entryKey,
       });
     }
+    // 排序：settings.order 优先，未列出的按名称排后面。
+    const order = loadBalanceSettings().order;
+    const rank = new Map(order.map((id, index) => [id, index] as const));
+    entries.sort(
+      (a, b) =>
+        (rank.get(a.providerId) ?? order.length) - (rank.get(b.providerId) ?? order.length) ||
+        a.label.localeCompare(b.label),
+    );
     return entries;
   }, [providerSettingsView]);
 
@@ -294,7 +304,8 @@ export function useThirdPartyBalances(options?: { refreshSignal?: number }) {
       const cache = readCache();
       for (const target of targets) {
         const cached = cache.balances[target.entryKey];
-        const fresh = cached && Date.now() - cached.fetchedAt < CACHE_TTL_MS;
+        const ttlMs = Math.max(1, loadBalanceSettings().refreshMinutes) * 60_000;
+        const fresh = cached && Date.now() - cached.fetchedAt < ttlMs;
         if (!force && fresh) continue;
         setLoadingKeys((current) => ({ ...current, [target.entryKey]: true }));
 
@@ -317,6 +328,8 @@ export function useThirdPartyBalances(options?: { refreshSignal?: number }) {
               // code!=0 多为会话过期；payload 不合法也算同一种失败。
               throw new Error("mimo usage unavailable (login required?)");
             }
+            // 日快照：百分比型也记（存已用百分点，今日消耗 = 当前 − 昨日基线）。
+            recordBalanceObservation(target.entryKey, parsed.monthPercent * 100);
             return {
               monthPercent: parsed.monthPercent,
               planUsed: parsed.planUsed,
@@ -394,14 +407,21 @@ export function useThirdPartyBalances(options?: { refreshSignal?: number }) {
         label: target.label,
         vendor: target.vendor,
         consoleUrl: target.consoleUrl,
+        todayPercentValue: null as number | null,
       };
 
       if (target.vendor === "mimo") {
         const hasCookie = Boolean(readMimoCookie());
+        // 今日消耗百分点 = 当前已用% − 昨日基线已用%（存储的"balance"即已用百分点）。
+        const percentDelta =
+          cached?.monthPercent !== undefined
+            ? computeTodaySpent(dailyStore, target.entryKey, cached.monthPercent * 100, today)
+            : null;
         const mimoBase = {
           ...base,
           balanceText: null,
           todaySpentValue: null,
+          todayPercentValue: percentDelta === null ? null : -percentDelta,
           currencySymbol: null,
           monthPercent: null as number | null,
           planUsed: null as number | null,
@@ -483,5 +503,16 @@ export function useThirdPartyBalances(options?: { refreshSignal?: number }) {
     });
   }, [loadingKeys, targets, cacheVersion]);
 
-  return { entries, refresh: () => refresh(true), supported: entries.length > 0 };
+  const applySettings = useCallback(() => {
+    // 设置变更：驱使 entries 重算（排序/显示开关/今日口径）并让新 TTL 生效。
+    setCacheVersion((version) => version + 1);
+    refresh(false);
+  }, [refresh]);
+
+  return {
+    entries,
+    refresh: () => refresh(true),
+    applySettings,
+    supported: entries.length > 0,
+  };
 }

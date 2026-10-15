@@ -4779,6 +4779,14 @@ const zhCN: Record<string, string> = {
   "chat.thirdPartyBalance.cookieDialog.title": "连接 MiMo Tokens Plan",
   "chat.thirdPartyBalance.cookieDialog.description":
     "MiMo 的用量接口只认登录 Cookie（API key 读不了）。\n取法：登录 platform.xiaomimimo.com → F12 → Network → 任选一个该站请求 → 复制 Cookie 请求头整串粘贴到下面。\nCookie 只存本机、只发给小米官方域；会话过期后重新粘贴即可。",
+  "chat.thirdPartyBalance.settings.title": "余额面板设置",
+  "chat.thirdPartyBalance.settings.showToday": "显示「今日」已用（金额 / 百分比）",
+  "chat.thirdPartyBalance.settings.showTodayTotal": "显示「今日花费」总额",
+  "chat.thirdPartyBalance.settings.showPlan": "显示计划额度小字",
+  "chat.thirdPartyBalance.settings.refresh": "刷新间隔（分钟）",
+  "chat.thirdPartyBalance.settings.order": "显示顺序",
+  "chat.thirdPartyBalance.settings.up": "上移",
+  "chat.thirdPartyBalance.settings.down": "下移",
   "chat.thirdPartyBalance.cookieDialog.placeholder":
     "粘贴 Cookie 请求头整串（含 api-platform_serviceToken 等字段）",
   "chat.contextUsage.breakdown": "上下文来源",

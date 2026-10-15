@@ -1,7 +1,9 @@
+/* oxlint-disable eslint(max-lines) -- 余额面板含行渲染/今日口径/设置对话框/Cookie 登录流，拆分会把一条面板交互链打散到三处。 */
 import { useState } from "react";
-import { RefreshCwIcon, ExternalLinkIcon, KeyRoundIcon } from "lucide-react";
+import { RefreshCwIcon, ExternalLinkIcon, KeyRoundIcon, Settings2Icon } from "lucide-react";
 import { cn } from "@/components/lib/utils.js";
 import { Button } from "@/components/ui/button.js";
+import { Checkbox } from "@/components/ui/checkbox.js";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +14,10 @@ import {
 import { toast } from "@/components/ui/toast.js";
 import { useOptionalPlatform } from "@/hooks/usePlatform.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
+import {
+  loadBalanceSettings,
+  saveBalanceSettings,
+} from "@/lib/thirdPartyBalanceSettings.js";
 import {
   compactTokens,
   readMimoCookie,
@@ -54,8 +60,15 @@ function formatFetchedAt(fetchedAt: number | null): string | null {
   return `${Math.floor(minutes / 60)}h`;
 }
 
-/** 今日已用格式化：正数=消费（−¥），负数=余额增加（+¥）。 */
+/**
+ * 今日已用格式化：金额型 = 正数消费（−¥）/ 余额增加（+¥）；
+ * 百分比型（mimo）= 今日消耗百分点（−2.1%）/ 回吐（+x.x%）。
+ */
 function formatTodaySpent(entry: ThirdPartyBalanceEntry): string | null {
+  if (entry.todayPercentValue !== null) {
+    const points = Math.abs(entry.todayPercentValue).toFixed(1);
+    return entry.todayPercentValue >= 0 ? `−${points}%` : `+${points}%`;
+  }
   if (entry.todaySpentValue === null) return null;
   const symbol = entry.currencySymbol ?? "¥";
   const value = Math.abs(entry.todaySpentValue).toFixed(2);
@@ -65,6 +78,8 @@ function formatTodaySpent(entry: ThirdPartyBalanceEntry): string | null {
 function BalanceRow({
   entry,
   todayLabel,
+  showToday,
+  showPlan,
   onRefresh,
   onSetCookie,
   onLogin,
@@ -72,6 +87,8 @@ function BalanceRow({
 }: {
   entry: ThirdPartyBalanceEntry;
   todayLabel: string;
+  showToday: boolean;
+  showPlan: boolean;
   onRefresh: () => void;
   onSetCookie: () => void;
   onLogin: () => void;
@@ -154,11 +171,13 @@ function BalanceRow({
           ) : null}
         </span>
       </div>
-      {todayText || planGrantText ? (
+      {(showToday && todayText) || (showPlan && planGrantText) ? (
         <div className="flex items-center justify-between gap-3 pl-0.5">
-          <span className="text-ui-sm text-foreground-subtlest">{planGrantText ?? ""}</span>
           <span className="text-ui-sm text-foreground-subtlest">
-            {todayText ? `${todayLabel} ${todayText}` : ""}
+            {showPlan ? (planGrantText ?? "") : ""}
+          </span>
+          <span className="text-ui-sm text-foreground-subtlest">
+            {showToday && todayText ? `${todayLabel} ${todayText}` : ""}
           </span>
         </div>
       ) : null}
@@ -174,7 +193,10 @@ function BalanceRow({
 export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: boolean }) {
   const { intl } = useZCodeIntl();
   const platform = useOptionalPlatform();
-  const { entries, refresh, supported } = useThirdPartyBalances();
+  const { entries, refresh, applySettings, supported } = useThirdPartyBalances();
+  const [settings, setSettings] = useState(() => loadBalanceSettings());
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settingsDraft, setSettingsDraft] = useState(() => loadBalanceSettings());
   const [refreshTick, setRefreshTick] = useState(0);
   const [cookieDialogOpen, setCookieDialogOpen] = useState(false);
   const [cookieDraft, setCookieDraft] = useState(readMimoCookie());
@@ -207,6 +229,30 @@ export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: 
       })
       .finally(() => setLoginBusy(false));
   };
+  const openSettings = () => {
+    setSettingsDraft({ ...loadBalanceSettings(), order: entries.map((e) => e.providerId) });
+    setSettingsOpen(true);
+  };
+  const moveOrder = (index: number, delta: number) => {
+    setSettingsDraft((draft) => {
+      const order = [...draft.order];
+      const target = index + delta;
+      if (target < 0 || target >= order.length) {
+        return draft;
+      }
+      const swapped = [...order];
+      const tmp = swapped[index]!;
+      swapped[index] = swapped[target]!;
+      swapped[target] = tmp;
+      return { ...draft, order: swapped };
+    });
+  };
+  const saveSettings = () => {
+    saveBalanceSettings(settingsDraft);
+    setSettings(settingsDraft);
+    applySettings();
+    setSettingsOpen(false);
+  };
   const todayLabel = intl.formatMessage({ id: "chat.thirdPartyBalance.today" });
   // 今日花费总额 = 各家今日已用的正数之和（充值不抵扣花费语义）。
   const spentValues = entries
@@ -230,6 +276,15 @@ export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: 
         <span className="text-ui-sm font-medium text-foreground">
           {intl.formatMessage({ id: "chat.thirdPartyBalance.title" })}
         </span>
+        <span className="flex items-center gap-1">
+        <button
+          type="button"
+          aria-label={intl.formatMessage({ id: "chat.thirdPartyBalance.settings.title" })}
+          className="text-foreground-subtlest transition-colors hover:text-foreground-subtle"
+          onClick={openSettings}
+        >
+          <Settings2Icon className="size-3.5" />
+        </button>
         <button
           type="button"
           aria-label={intl.formatMessage({ id: "chat.thirdPartyBalance.refreshAll" })}
@@ -241,18 +296,23 @@ export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: 
         >
           <RefreshCwIcon key={refreshTick} className="size-3.5" />
         </button>
-      </div>
-      <div className="flex items-center justify-between gap-3 rounded-md bg-muted/40 px-2 py-1">
-        <span className="text-ui-sm text-foreground-subtle">
-          {intl.formatMessage({ id: "chat.thirdPartyBalance.todayTotal" })}
         </span>
-        <span className="font-mono text-ui-sm font-medium text-foreground">{totalText}</span>
       </div>
+      {settings.showTodayTotal ? (
+        <div className="flex items-center justify-between gap-3 rounded-md bg-muted/40 px-2 py-1">
+          <span className="text-ui-sm text-foreground-subtle">
+            {intl.formatMessage({ id: "chat.thirdPartyBalance.todayTotal" })}
+          </span>
+          <span className="font-mono text-ui-sm font-medium text-foreground">{totalText}</span>
+        </div>
+      ) : null}
       {entries.map((entry) => (
         <BalanceRow
           key={entry.providerId}
           entry={entry}
           todayLabel={todayLabel}
+          showToday={settings.showToday}
+          showPlan={settings.showPlan}
           onRefresh={refresh}
           onLogin={startMimoLogin}
           loginBusy={loginBusy}
@@ -262,6 +322,96 @@ export function ChatThirdPartyBalancePanel({ separated = false }: { separated?: 
           }}
         />
       ))}
+      <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+        <DialogContent className="max-w-md overflow-hidden rounded-2xl p-0">
+          <div className="flex min-w-0 flex-col gap-4 p-5">
+            <DialogHeader className="space-y-2">
+              <DialogTitle>
+                {intl.formatMessage({ id: "chat.thirdPartyBalance.settings.title" })}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-2">
+              {(
+                [
+                  ["showToday", "chat.thirdPartyBalance.settings.showToday"],
+                  ["showTodayTotal", "chat.thirdPartyBalance.settings.showTodayTotal"],
+                  ["showPlan", "chat.thirdPartyBalance.settings.showPlan"],
+                ] as const
+              ).map(([key, labelId]) => (
+                <label key={key} className="flex cursor-pointer items-center gap-2 text-ui-sm">
+                  <Checkbox
+                    checked={settingsDraft[key]}
+                    onCheckedChange={(checked) =>
+                      setSettingsDraft((draft) => ({ ...draft, [key]: checked === true }))
+                    }
+                  />
+                  {intl.formatMessage({ id: labelId })}
+                </label>
+              ))}
+            </div>
+            <label className="flex items-center gap-2 text-ui-sm">
+              {intl.formatMessage({ id: "chat.thirdPartyBalance.settings.refresh" })}
+              <input
+                type="number"
+                min={1}
+                max={60}
+                value={settingsDraft.refreshMinutes}
+                className="w-16 rounded-md border border-input-border bg-input px-2 py-1 text-ui-sm text-foreground outline-none"
+                onChange={(event) =>
+                  setSettingsDraft((draft) => ({
+                    ...draft,
+                    refreshMinutes: Math.max(1, Math.min(60, Number(event.target.value) || 5)),
+                  }))
+                }
+              />
+            </label>
+            <div className="flex flex-col gap-1">
+              <span className="text-ui-sm text-foreground-subtle">
+                {intl.formatMessage({ id: "chat.thirdPartyBalance.settings.order" })}
+              </span>
+              {settingsDraft.order.map((id, index) => (
+                <div key={id} className="flex items-center justify-between gap-2 text-ui-sm">
+                  <span className="truncate text-foreground">
+                    {entries.find((entry) => entry.providerId === id)?.label ?? id}
+                  </span>
+                  <span className="flex gap-1">
+                    <button
+                      type="button"
+                      aria-label={intl.formatMessage({ id: "chat.thirdPartyBalance.settings.up" })}
+                      className="text-foreground-subtlest hover:text-foreground"
+                      onClick={() => moveOrder(index, -1)}
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={intl.formatMessage({ id: "chat.thirdPartyBalance.settings.down" })}
+                      className="text-foreground-subtlest hover:text-foreground"
+                      onClick={() => moveOrder(index, 1)}
+                    >
+                      ↓
+                    </button>
+                  </span>
+                </div>
+              ))}
+            </div>
+            <DialogFooter className="flex items-center justify-end gap-3">
+              <Button
+                type="button"
+                variant="secondary"
+                size="lg"
+                className="h-10 min-w-0 px-5"
+                onClick={() => setSettingsOpen(false)}
+              >
+                {intl.formatMessage({ id: "common.cancel" })}
+              </Button>
+              <Button type="button" size="lg" className="h-10 min-w-0 px-5" onClick={saveSettings}>
+                {intl.formatMessage({ id: "common.confirm" })}
+              </Button>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
       <Dialog
         open={cookieDialogOpen}
         onOpenChange={(open) => {
