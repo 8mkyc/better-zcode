@@ -4664,8 +4664,6 @@ const zhCN: Record<string, string> = {
   "chat.message.disliked": "已踩",
   "chat.message.fork": "分叉",
   "chat.message.forkAndDelete": "从此处继续对话，删除之后的对话（文件修改不会回溯）",
-  "chat.message.forkAndDeleteShort": "从此处继续",
-  "chat.rewindPicker.hint": "选择要继续到的消息：点「从此处继续」按钮 · Esc 取消",
   "chat.message.forking": "正在分叉...",
   "chat.message.fork.unavailable": "任务结束后可分叉",
   "chat.message.fork.unsupported": "当前agent暂不支持分叉功能",

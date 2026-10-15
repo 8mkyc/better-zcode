@@ -4981,9 +4981,6 @@ const enUS: Record<string, string> = {
   "chat.message.fork": "Fork",
   "chat.message.forkAndDelete":
     "Continue from here, deleting later messages (file changes are not reverted)",
-  "chat.message.forkAndDeleteShort": "Continue from here",
-  "chat.rewindPicker.hint":
-    "Pick a message: click its \"Continue from here\" button · Esc to cancel",
   "chat.message.forking": "Forking...",
   "chat.message.fork.unavailable": "Fork after task finishes",
   "chat.message.fork.unsupported": "The current agent does not support forking yet",

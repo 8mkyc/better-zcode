@@ -68,8 +68,6 @@ import {
   persistForkAndDeleteSkip,
   shouldSkipForkAndDeleteConfirm,
 } from "@/v4/ForkAndDeleteConfirmDialog.js";
-import { useRewindPickerHotkey } from "@/hooks/useRewindPickerHotkey.js";
-import { useRewindPickerStore } from "@/lib/rewindPickerStore.js";
 import { cn } from "@/components/lib/utils.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import { DEFAULT_CODE_PREVIEW_SETTINGS } from "@/lib/codePreviewSettings.js";
@@ -638,9 +636,6 @@ export function SessionPane({
   } = useServices();
   const { intl, locale } = useZCodeIntl();
   const removeTaskState = useZCodeSessionStore((state) => state.removeTaskState);
-  // 双击 Esc =「从此处继续」选择模式（本 fork 新增）。
-  useRewindPickerHotkey();
-  const rewindPickerActive = useRewindPickerStore((state) => state.active);
   // 「从此处继续对话」一次性确认：resolver 挂起 handleFork，弹窗选择后放行。
   const [forkConfirmResolver, setForkConfirmResolver] = useState<
     ((confirmed: boolean) => void) | null
@@ -3785,8 +3780,6 @@ export function SessionPane({
 
   const handleFork = useCallback(
     (target: ConversationRowTarget, options?: { deleteOriginal?: boolean }) => {
-      // 点击任意分叉动作即视为已选择，退出「从此处继续」选择模式。
-      useRewindPickerStore.getState().setActive(false);
       const current = snapshotRef.current;
       if (!sessionId || current === null) return;
       const runFork = () => {
@@ -5788,11 +5781,6 @@ export function SessionPane({
           )}
         </div>
       </div>
-      {rewindPickerActive ? (
-        <div className="pointer-events-none fixed bottom-10 left-1/2 z-50 -translate-x-1/2 rounded-full border border-border bg-popover px-4 py-2 text-ui-sm text-popover-foreground shadow-md">
-          {intl.formatMessage({ id: "chat.rewindPicker.hint" })}
-        </div>
-      ) : null}
       <ForkAndDeleteConfirmDialog
         open={forkConfirmResolver !== null}
         onResolve={(confirmed, rememberSkip) => {

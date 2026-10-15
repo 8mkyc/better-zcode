@@ -1,5 +1,4 @@
 import { GenUiMessageResponse } from "@/gen-ui/index.js";
-import { useRewindPickerStore } from "@/lib/rewindPickerStore.js";
 import { ConversationUserInputBubble } from "@/v4/ConversationUserInputBubble.js";
 import { expandTopicInputMessages } from "@/v4/topicInputMessages.js";
 import { ConnectedBotGroupDeliveryAction } from "@/v4/BotGroupDeliveryAction.js";
@@ -1496,7 +1495,6 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
   onFork,
   onFeedbackChange,
   className,
-  pickerActive,
 }: {
   rowId: number;
   entityId?: string;
@@ -1512,8 +1510,6 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
   onRetry?: (target: ConversationRowTarget) => void;
   onFeedbackChange?: AssistantFeedbackHandler;
   className?: string;
-  /** 「从此处继续」选择模式：强制显按钮并亮出短标签（本 fork 新增）。 */
-  pickerActive?: boolean;
 }) {
   const { intl, locale } = useZCodeIntl();
   const platform = useOptionalPlatform();
@@ -1527,7 +1523,6 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
   });
   const forkLabel = intl.formatMessage({ id: "chat.message.fork" });
   const forkAndDeleteLabel = intl.formatMessage({ id: "chat.message.forkAndDelete" });
-  const forkAndDeleteShort = intl.formatMessage({ id: "chat.message.forkAndDeleteShort" });
   const timeLabel = formatMessageTimeLabel(createdAt, locale, intl);
   const resolveTooltip = (label: string): string | undefined =>
     compactForRemoteControl ? undefined : label;
@@ -1660,10 +1655,7 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
           tooltip={resolveTooltip(forkAndDeleteLabel)}
           onClick={handleForkAndDelete}
         >
-          <Trash2Icon className={cn("size-3.5", pickerActive && "text-destructive")} />
-          {pickerActive ? (
-            <span className="text-ui-sm text-destructive">{forkAndDeleteShort}</span>
-          ) : null}
+          <Trash2Icon className="size-3.5" />
         </MessageAction>
       ) : null}
       {turnId && hookInvocations ? (
@@ -1710,8 +1702,6 @@ const AssistantTextRowView = memo(function AssistantTextRowView({
 }) {
   const streaming = row.state === "streaming";
   const isOfficeMode = useIsOfficeMode();
-  // 「从此处继续」选择模式：激活时所有 AI 行的动作按钮强制显示（本 fork 新增）。
-  const pickerActive = useRewindPickerStore((state) => state.active);
   const codeCommentCardsEnabled = useAssistantCodeCommentFeatureEnabled();
   const projectsCodeComments = codeCommentCardsEnabled && codeCommentProjectionEnabled === true;
   const visibleText = useMemo(
@@ -1792,10 +1782,9 @@ const AssistantTextRowView = memo(function AssistantTextRowView({
           onFork={onFork}
           onRetry={onRetry}
           onFeedbackChange={onFeedbackChange}
-          pickerActive={pickerActive}
           className={cn(
             "mt-1",
-            context.compactForRemoteControl || pickerActive
+            context.compactForRemoteControl
               ? "opacity-100"
               : "opacity-0 transition-opacity group-hover/assistant-row:opacity-100 focus-within:opacity-100",
           )}
