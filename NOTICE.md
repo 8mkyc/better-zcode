@@ -1,3 +1,15 @@
+# NOTICE
+
+## Better ZCode 分支修改声明
+
+本仓库是 [zai-org/ZCode](https://github.com/zai-org/ZCode)（Apache License 2.0）的第三方修改分支（fork），产品名 **Better ZCode**。
+
+- 本项目为社区改款，**与 Z.ai / 智谱无隶属或背书关系**；"ZCode" 名称及原始商标归其权利人所有，本分支仅在 Apache-2.0 许可允许的范围内引用以说明来源。
+- 相对上游的全部修改见 [CHANGELOG.md](CHANGELOG.md) 与 [docs/与官方差异表.md](docs/与官方差异表.md)；按 Apache-2.0 要求，本声明即修改说明。
+- 原始上游的 NOTICE（下方全文保留）继续适用于未修改部分。
+
+---
+
 # ZCode 相关功能说明与第三方组件声明
 
 本声明适用于本仓库公开的源码及其构建产物。各运行形态的功能、权限、存储位置和网络行为不同，不能将其中一种形态的默认设置理解为整个项目的统一设置。

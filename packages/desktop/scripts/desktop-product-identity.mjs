@@ -5,21 +5,23 @@
  */
 export const ZCODE_PREVIEW_IDENTITY_ENV = "ZCODE_PREVIEW_IDENTITY";
 
+// 本 fork 改名（better-zcode）：产品身份与官方 ZCode 隔离（appId/产品名/安装目录不同，
+// 可与官方版并存互不覆盖）。上游 drop 同步时保留本段即可。
 const PRODUCTION_IDENTITY = Object.freeze({
   flavor: "production",
-  appId: "dev.zcode.app",
-  productName: "ZCode",
-  linuxExecutableName: "zcode",
-  linuxPackageName: "zcode",
+  appId: "app.betterzcode.desktop",
+  productName: "Better ZCode",
+  linuxExecutableName: "better-zcode",
+  linuxPackageName: "better-zcode",
   cuaHelperInstallVariant: null,
 });
 
 const PREVIEW_IDENTITY = Object.freeze({
   flavor: "preview",
-  appId: "dev.zcode.app.preview",
-  productName: "ZCode Preview",
-  linuxExecutableName: "zcode-preview",
-  linuxPackageName: "zcode-preview",
+  appId: "app.betterzcode.desktop.preview",
+  productName: "Better ZCode Preview",
+  linuxExecutableName: "better-zcode-preview",
+  linuxPackageName: "better-zcode-preview",
   cuaHelperInstallVariant: "preview",
 });
 

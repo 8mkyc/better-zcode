@@ -1,0 +1,56 @@
+# Better ZCode 发布流水线：打 v* tag 自动构建 Windows 安装包并发布 Release。
+# 首跑如遇 CI 环境差异失败，兜底方案：本地 bundle 后用 gh release upload 上传产物。
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          HUSKY: "0"
+          ZCODE_ENV: production
+
+      - name: Build desktop bundles
+        run: pnpm --filter "@zcode/desktop..." run build
+        env:
+          ZCODE_ENV: production
+
+      - name: Bundle Windows installer
+        run: pnpm --filter "@zcode/desktop" run bundle -- --os win --arch x64
+        env:
+          ZCODE_ENV: production
+
+      - name: Compute SHA256
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem "packages/desktop/dist/*.exe" | Select-Object -First 1
+          $hash = (Get-FileHash $exe.FullName -Algorithm SHA256).Hash
+          "$hash  $($exe.Name)" | Out-File "$($exe.FullName).sha256.txt" -Encoding ascii
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            packages/desktop/dist/*.exe
+            packages/desktop/dist/*.exe.sha256.txt
+          generate_release_notes: true

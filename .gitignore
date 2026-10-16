@@ -73,3 +73,8 @@ packages/desktop/resources/macos-window-bounds/
 __pycache__/
 *.pyc
 .zcode-runtime
+
+# 本地开发工具与运行日志（含本机绝对路径，不入公共库）
+update-fork-last-run.log
+update-fork-wait.ps1
+update-fork-desktop.ps1
