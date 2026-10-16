@@ -14,3 +14,7 @@ third-party/runtime/*.txt -text -whitespace
 docs/knip/docs/LICENSE -text -whitespace
 docs/knip/docs/licenses/** -text -whitespace
 third-party/inventory.json linguist-generated=true
+
+# Gen UI 可视化插件的 vendor 资产构建期按 sha256 逐字节校验，
+# Windows 检出不能自动转换换行（否则 CRLF 改变哈希导致构建失败）。
+apps/zcode-cli/packages/visualize-plugin/skills/visualize/assets/vendor/** -text
